@@ -1,0 +1,29 @@
+{
+    "key": "test",
+    "key1": true,
+    "key2": 0.25,
+    "key3": 2334,
+    "key4": "test4",
+    "key5": {
+        "name": "niffy",
+        "age": 10,
+        "sex": "male"
+    },
+    "key6": {
+      "x1":"v1",
+      "x2":"v2",
+      "x3":"v3"
+    },
+    "key7":[
+      "t1",
+      "t2",
+      "t3"
+    ],
+    "key8":"2019-04-04 15:24:12",
+    "key9": "9s",
+    "key10":{
+      "key11":{
+        "name": "testname"
+      }
+    }
+  }
