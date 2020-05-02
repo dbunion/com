@@ -24,6 +24,11 @@ type Config struct {
 	DBName          string `json:"db_name"`
 	TableName       string `json:"table_name"`
 	AutoCreateTable bool   `json:"auto_create_table"`
+
+	// Extend fields
+	// Extended fields can be used if there is a special implementation
+	Extend1 string `json:"extend_1"`
+	Extend2 string `json:"extend_2"`
 }
 
 // UID interface contains all behaviors for UID adapter.
