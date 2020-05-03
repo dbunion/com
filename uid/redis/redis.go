@@ -93,5 +93,5 @@ func (r *UID) StartAndGC(config uid.Config) error {
 }
 
 func init() {
-	uid.Register("RedisUID", NewRedisUID)
+	uid.Register(uid.TypeRedis, NewRedisUID)
 }

@@ -4,6 +4,15 @@ import (
 	"fmt"
 )
 
+const(
+	// TypeMySQL - uid use mysql
+	TypeMySQL = "mysql"
+	// TypeRedis - uid use redis
+	TypeRedis = "redis"
+	// TypeSnowFlake - uid use snow flake
+	TypeSnowFlake = "snow_flake"
+)
+
 // Config - uid config
 type Config struct {
 	// Redis config

@@ -6,7 +6,7 @@
 
 提供标准的公共组件，减少不同工程间的代码重复，提高代码的复用率；本工程主要是对已有一些库的封装，站在前辈的肩膀上；
 主要包括以下组件，会持续完善。
-* 全局唯一序列(uid)
+* [sequence(uid)]((https://github.com/dbunion/com/blob/master/uid/README_cn.md) )
 * rpc
 * monitor
 * image
