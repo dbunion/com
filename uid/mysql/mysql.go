@@ -239,5 +239,5 @@ func (r *MyUID) StartAndGC(config uid.Config) error {
 }
 
 func init() {
-	uid.Register("MySqlUID", NewMyUID)
+	uid.Register(uid.TypeMySQL, NewMyUID)
 }

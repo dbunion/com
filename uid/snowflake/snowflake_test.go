@@ -2,37 +2,41 @@ package snowflake
 
 import (
 	"github.com/dbunion/com/uid"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestNewSnowflake(t *testing.T) {
-	s := NewSnowflake()
-	config := uid.Config{NodeID: 1}
-	if err := s.StartAndGC(config); err != nil {
-		panic(err)
+	s, err := uid.NewUID(uid.TypeSnowFlake, uid.Config{NodeID: 1})
+	if err != nil {
+		t.Fatalf("create new uid error, err:%v", err)
 	}
 
+	assert.NotNil(t, s)
+
 	for i := 0; i < 10; i++ {
-		t.Logf("%d", s.NextUID64())
+		sequence := s.NextUID64()
+		assert.NotEqual(t, -1, sequence)
+		t.Logf("%d", sequence)
 	}
 
 	t.Logf("generate success")
 }
 
 func BenchmarkNewSnowflake(b *testing.B) {
-	s1 := NewSnowflake()
-	if err := s1.StartAndGC(uid.Config{NodeID: 1}); err != nil {
-		panic(err)
+	s1, err := uid.NewUID(uid.TypeSnowFlake, uid.Config{NodeID: 1})
+	if err != nil {
+		b.Fatalf("create new uid error, err:%v", err)
 	}
 
-	s2 := NewSnowflake()
-	if err := s2.StartAndGC(uid.Config{NodeID: 2}); err != nil {
-		panic(err)
+	s2, err := uid.NewUID(uid.TypeSnowFlake, uid.Config{NodeID: 2})
+	if err != nil {
+		b.Fatalf("create new uid error, err:%v", err)
 	}
 
-	s3 := NewSnowflake()
-	if err := s3.StartAndGC(uid.Config{NodeID: 3}); err != nil {
-		panic(err)
+	s3, err := uid.NewUID(uid.TypeSnowFlake, uid.Config{NodeID: 3})
+	if err != nil {
+		b.Fatalf("create new uid error, err:%v", err)
 	}
 
 	for i := 0; i < b.N; i++ {

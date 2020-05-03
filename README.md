@@ -5,10 +5,11 @@
 [中文版](https://github.com/dbunion/com/blob/master/README_cn.md) 
 [英文版](https://github.com/dbunion/com/blob/master/README.md) 
 
-Provide standard public components, reduce code duplication between different projects, and improve code reuse rate; this project is mainly to encapsulate some existing libraries, standing on the shoulders of the predecessors;
+Provide standard public components, reduce code duplication between different projects, and improve code reuse rate; this project is mainly to encapsulate some existing libraries, standing on the shoulders of the predecessors.
+
 It mainly includes the following components and will continue to improve.
 
-* sequence(uid)
+* [sequence(uid)]((https://github.com/dbunion/com/blob/master/uid/README.md) )
 * rpc
 * monitor
 * image
@@ -23,4 +24,5 @@ It mainly includes the following components and will continue to improve.
 * scheduler
 
 # Thanks
-This project is packaged on the basis of many open source projects. Thank you for your efforts. If there is any infringement or use problem, please contact us in time. Thank you
+This project is packaged on the basis of many open source projects. Thank you for your efforts. If there is any infringement or use problem, please contact us in time. Thank you.
+

@@ -50,5 +50,5 @@ func (s *Snowflake) StartAndGC(config uid.Config) (err error) {
 }
 
 func init() {
-	uid.Register("SnowflakeUID", NewSnowflake)
+	uid.Register(uid.TypeSnowFlake, NewSnowflake)
 }

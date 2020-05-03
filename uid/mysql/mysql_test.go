@@ -2,13 +2,13 @@ package mysql
 
 import (
 	"github.com/dbunion/com/uid"
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
 
 func TestNewMyUID32(t *testing.T) {
-	s := NewMyUID()
-	if err := s.StartAndGC(uid.Config{
+	s, err := uid.NewUID(uid.TypeMySQL, uid.Config{
 		Server:          "127.0.0.1",
 		Port:            3306,
 		User:            "test",
@@ -18,14 +18,20 @@ func TestNewMyUID32(t *testing.T) {
 		DBName:          "test",
 		TableName:       "int32_seq",
 		AutoCreateTable: true,
-	}); err != nil {
+	})
+
+	if err != nil {
 		t.Fatalf("start err:%v", err)
 		return
 	}
 
+	assert.NotNil(t, s)
+
 	for i := 0; i < 50; i++ {
 		if s.HasInt32() {
-			t.Logf("Int32:%v", s.NextUID32())
+			sequence := s.NextUID32()
+			assert.NotEqual(t, -1, sequence)
+			t.Logf("Int32:%v", sequence)
 		}
 	}
 
@@ -37,8 +43,7 @@ func TestNewMyUID32(t *testing.T) {
 }
 
 func TestNewMyUID64(t *testing.T) {
-	s := NewMyUID()
-	if err := s.StartAndGC(uid.Config{
+	s, err := uid.NewUID(uid.TypeMySQL, uid.Config{
 		Server:          "127.0.0.1",
 		Port:            3306,
 		User:            "test",
@@ -48,13 +53,18 @@ func TestNewMyUID64(t *testing.T) {
 		DBName:          "test",
 		TableName:       "int64_seq",
 		AutoCreateTable: true,
-	}); err != nil {
+	})
+	if err != nil {
 		t.Fatalf("start err:%v", err)
 		return
 	}
 
+	assert.NotNil(t, s)
+
 	for i := 0; i < 5000; i++ {
-		t.Logf("Int64:%v", s.NextUID64())
+		sequence := s.NextUID64()
+		assert.NotEqual(t, -1, sequence)
+		t.Logf("Int64:%v", sequence)
 	}
 	if err := s.Close(); err != nil {
 		t.Fatalf("close err:%v", err)
