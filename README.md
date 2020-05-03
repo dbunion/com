@@ -9,7 +9,7 @@ Provide standard public components, reduce code duplication between different pr
 
 It mainly includes the following components and will continue to improve.
 
-* [sequence(uid)]((https://github.com/dbunion/com/blob/master/uid/README.md) )
+* [sequence(uid)](https://github.com/dbunion/com/blob/master/uid/README.md)
 * rpc
 * monitor
 * image
