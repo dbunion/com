@@ -74,19 +74,3 @@ func TestZsskyErrorLog(t *testing.T) {
 	logger.Errorf("log test, date:%v", time.Now().Unix())
 }
 
-func TestZsskyFatalLog(t *testing.T) {
-	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelFatal,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
-		JSONFormatter: false,
-	})
-
-	if err != nil {
-		t.Fatalf("create new logger error, err:%v", err)
-	}
-
-	logger.Fatalf("log test, date:%v", time.Now().Unix())
-}
