@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-const(
+const (
 	// TypeMySQL - uid use mysql
 	TypeMySQL = "mysql"
 	// TypeRedis - uid use redis

@@ -14,8 +14,10 @@ require (
 	github.com/kisielk/errcheck v1.2.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.6.0 // indirect
+	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.4.0
+	github.com/zssky/log v1.0.3
 	gitlab.com/opennota/check v0.0.0-20181224073239-ccaba434e62a // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/net v0.0.0-20190923162816-aa69164e4478
