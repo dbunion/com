@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: dbunion/golang_1_13:v1.0.2
+      - image: dbunion/golang_1_13:v1.0.5
     working_directory: /go/src/github.com/dbunion/com
     steps:
       - checkout
