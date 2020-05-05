@@ -73,4 +73,3 @@ func TestZsskyErrorLog(t *testing.T) {
 
 	logger.Errorf("log test, date:%v", time.Now().Unix())
 }
-
