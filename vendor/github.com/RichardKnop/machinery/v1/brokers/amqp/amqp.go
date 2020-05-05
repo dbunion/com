@@ -325,10 +325,10 @@ func (b *Broker) consumeOne(delivery amqp.Delivery, taskProcessor iface.TaskProc
 		requeue = true
 		log.INFO.Printf("Task not registered with this worker. Requeing message: %s", delivery.Body)
 
-		if !signature.IgnoreWhenTaskNotRegistered {
+    if !signature.IgnoreWhenTaskNotRegistered {
 			delivery.Nack(multiple, requeue)
 		}
-
+    
 		return nil
 	}
 

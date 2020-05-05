@@ -20,13 +20,13 @@ import (
 
 // Worker represents a single worker process
 type Worker struct {
-	server            *Server
-	ConsumerTag       string
-	Concurrency       int
-	Queue             string
-	errorHandler      func(err error)
-	preTaskHandler    func(*tasks.Signature)
-	postTaskHandler   func(*tasks.Signature)
+	server          *Server
+	ConsumerTag     string
+	Concurrency     int
+	Queue           string
+	errorHandler    func(err error)
+	preTaskHandler  func(*tasks.Signature)
+	postTaskHandler func(*tasks.Signature)
 	preConsumeHandler func(*Worker) bool
 }
 
