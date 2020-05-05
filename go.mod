@@ -13,6 +13,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
+	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.6.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
@@ -24,6 +25,11 @@ require (
 	gitlab.com/opennota/check v0.0.0-20181224073239-ccaba434e62a // indirect
 	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
 	google.golang.org/grpc v1.29.1
+	k8s.io/api v0.18.2
+	k8s.io/apimachinery v0.18.2
+	k8s.io/client-go v0.18.2
+	k8s.io/utils v0.0.0-20200414100711-2df71ebbae66 // indirect
+	sigs.k8s.io/yaml v1.2.0
 	vitess.io/vitess v0.0.0-00010101000000-000000000000
 )
 
