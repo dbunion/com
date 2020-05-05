@@ -37,9 +37,9 @@ func (g *GoOrm) Gen() error {
 }
 
 func (g *GoOrm) genDB() error {
-	file := fmt.Sprintf("%s_gen.go", strcase.ToSnake(g.cfg.Package))
+	file := fmt.Sprintf("gen_%s.go", strcase.ToSnake(g.cfg.Package))
 	if g.cfg.GenPath != "" {
-		file = fmt.Sprintf("%s/%s_gen.go", g.cfg.GenPath, strcase.ToSnake(g.cfg.Package))
+		file = fmt.Sprintf("%s/gen_%s.go", g.cfg.GenPath, strcase.ToSnake(g.cfg.Package))
 	}
 	packageTpl, err := template.New("packageTpl").Funcs(g.funcMap()).Parse(templateDB)
 	if err != nil {
@@ -71,7 +71,7 @@ func (g *GoOrm) genDB() error {
 	return nil
 }
 
-func (g *GoOrm) genAllInOne() error {
+func (g *GoOrm) genAllInOne() (gErr error) {
 	if err := g.genDB(); err != nil {
 		return err
 	}
@@ -100,6 +100,18 @@ func (g *GoOrm) genAllInOne() error {
 		return err
 	}
 
+	defer func() {
+		if err := writer.Close(); err != nil {
+			gErr = err
+			return
+		}
+
+		if _, err := exec.RunShellCommand(fmt.Sprintf("gofmt -w %s", file)); err != nil {
+			gErr = err
+			return
+		}
+	}()
+
 	// write header
 	if _, err := fmt.Fprint(writer, buff.String()); err != nil {
 		return err
@@ -118,17 +130,67 @@ func (g *GoOrm) genAllInOne() error {
 		}
 	}
 
-	if err := writer.Close(); err != nil {
-		return err
-	}
-
-	if _, err := exec.RunShellCommand(fmt.Sprintf("gofmt -w %s", file)); err != nil {
-		return err
-	}
 	return nil
 }
 
-func (g *GoOrm) genSegregate() error {
+func (g *GoOrm) genSegregate() (gErr error) {
+	if err := g.genDB(); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(g.cfg.Items); i++ {
+		item := g.cfg.Items[i]
+
+		file := fmt.Sprintf("gen_%s.go", strcase.ToSnake(item.Name))
+		if g.cfg.GenPath != "" {
+			file = fmt.Sprintf("%s/gen_%s.go", g.cfg.GenPath, strcase.ToSnake(item.Name))
+		}
+
+		headerTpl, err := template.New("headerTpl").Funcs(g.funcMap()).Parse(templateHeader)
+		if err != nil {
+			return err
+		}
+
+		var buff bytes.Buffer
+		if err := headerTpl.Execute(&buff, g.cfg); err != nil {
+			return err
+		}
+
+		bodyTpl, err := template.New("bodyTpl").Funcs(g.funcMap()).Parse(templateBody)
+		if err != nil {
+			return err
+		}
+
+		writer, err := os.Create(file)
+		if err != nil {
+			return err
+		}
+
+		// write header
+		if _, err := fmt.Fprint(writer, buff.String()); err != nil {
+			_ = writer.Close()
+			return err
+		}
+
+		buff.Reset()
+		if err := bodyTpl.Execute(&buff, item); err != nil {
+			_ = writer.Close()
+			return err
+		}
+
+		if _, err := fmt.Fprint(writer, buff.String()); err != nil {
+			_ = writer.Close()
+			return err
+		}
+
+		if err := writer.Close(); err != nil {
+			return err
+		}
+
+		if _, err := exec.RunShellCommand(fmt.Sprintf("gofmt -w %s", file)); err != nil {
+			return err
+		}
+	}
 
 	return nil
 }

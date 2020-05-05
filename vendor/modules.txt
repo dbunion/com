@@ -166,10 +166,6 @@ github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
 # github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 github.com/iancoleman/strcase
-# github.com/jinzhu/gorm v1.9.12
-github.com/jinzhu/gorm
-# github.com/jinzhu/inflection v1.0.0
-github.com/jinzhu/inflection
 # github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
 github.com/jmespath/go-jmespath
 # github.com/json-iterator/go v1.1.9
