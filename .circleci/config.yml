@@ -3,16 +3,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: dbunion/golang_1_13:v1.0.4
+      - image: dbunion/golang_1_13:v1.0.5
     working_directory: /go/src/github.com/dbunion/com
     steps:
       - checkout
       - run:
           name: "Start Dep Service"
           command: service redis-server start && service memcached start && service mysql start && mysql -e "CREATE DATABASE IF NOT EXISTS test; GRANT ALL PRIVILEGES ON *.* TO 'test'@'127.0.0.1' IDENTIFIED BY '123456'"
-      - run:
-          name: "Start minikube"
-          command: minikube start --driver=none && minikube status
       - run:
           name: "Bootstrap && Precheck && Test"
           command: make bootstrap && make precheck && make test

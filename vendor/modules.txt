@@ -228,6 +228,7 @@ github.com/xdg/stringprep
 # github.com/zssky/log v1.0.4
 github.com/zssky/log
 # github.com/zssky/tc v0.0.0-20200328060218-603c6a2939da
+github.com/zssky/tc/exec
 github.com/zssky/tc/http
 github.com/zssky/tc/ssh
 # go.mongodb.org/mongo-driver v1.3.0
