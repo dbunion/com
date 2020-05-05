@@ -18,9 +18,13 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.4.0
+	github.com/youtube/vitess v2.1.1+incompatible // indirect
 	github.com/zssky/log v1.0.4
 	github.com/zssky/tc v0.0.0-20200328060218-603c6a2939da
 	gitlab.com/opennota/check v0.0.0-20181224073239-ccaba434e62a // indirect
 	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
 	google.golang.org/grpc v1.29.1
+	vitess.io/vitess v0.0.0-00010101000000-000000000000
 )
+
+replace vitess.io/vitess => vitess.io/vitess v0.0.0-20181209180904-4f192d1003d1
