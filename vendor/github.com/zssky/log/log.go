@@ -286,7 +286,7 @@ func (l *logger) log(t LogType, v ...interface{}) {
 	}
 
 	s := fmt.Sprintln(v1...)
-	l._log.Output(4, s)
+	l._log.Output(l.skip, s)
 }
 
 func (l *logger) logf(t LogType, format string, v ...interface{}) {
@@ -306,7 +306,7 @@ func (l *logger) logf(t LogType, format string, v ...interface{}) {
 	} else {
 		s = logStr + " " + l.caller() + " " + fmt.Sprintf(format, v...)
 	}
-	l._log.Output(4, s)
+	l._log.Output(l.skip, s)
 }
 
 func (l *logger) Fatal(v ...interface{}) {

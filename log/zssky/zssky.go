@@ -137,7 +137,11 @@ func (l *Log) StartAndGC(config log.Config) error {
 		}
 	}
 
-	zslog.SetCallerSkip(5)
+	callerSkip := 5
+	if config.CallerSkip != 0 {
+		callerSkip = config.CallerSkip
+	}
+	zslog.SetCallerSkip(callerSkip)
 
 	return nil
 }

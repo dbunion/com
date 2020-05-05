@@ -35,6 +35,7 @@ type Config struct {
 	RotateByDay   bool   `json:"rotate_by_day"`
 	RotateByHour  bool   `json:"rotate_by_hour"`
 	JSONFormatter bool   `json:"json_formatter"`
+	CallerSkip    int    `json:"caller_skip"`
 
 	// Extend fields
 	// Extended fields can be used if there is a special implementation
