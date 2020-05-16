@@ -11,8 +11,9 @@ const (
 
 // Item - gen item
 type Item struct {
-	Name   string `json:"name"`
-	Detail string `json:"detail"`
+	Name     string `json:"name"`
+	Relation string `json:"relation"`
+	Detail   string `json:"detail"`
 }
 
 // Config - init config
