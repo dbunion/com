@@ -25,6 +25,14 @@ func (g *GoOrm) funcMap() map[string]interface{} {
 	return map[string]interface{}{
 		"ToLower": strings.ToLower,
 		"ToSnake": strcase.ToSnake,
+		"MakePreload": func(relations []string) string {
+			sql := ""
+			for i := 0; i < len(relations); i++ {
+				sql += fmt.Sprintf("Preload(\"%s\").", relations[i])
+			}
+			sql = strings.TrimSuffix(sql, ".")
+			return sql
+		},
 	}
 }
 
@@ -121,7 +129,12 @@ func (g *GoOrm) genAllInOne() (gErr error) {
 	for i := 0; i < len(g.cfg.Items); i++ {
 		buff.Reset()
 		item := g.cfg.Items[i]
-		if err := bodyTpl.Execute(&buff, item); err != nil {
+		if err := bodyTpl.Execute(&buff, map[string]interface{}{
+			"Name":         item.Name,
+			"Detail":       item.Detail,
+			"Relations":    item.Relations,
+			"HasRelations": len(item.Relations) > 0,
+		}); err != nil {
 			return err
 		}
 
@@ -173,7 +186,12 @@ func (g *GoOrm) genSegregate() (gErr error) {
 		}
 
 		buff.Reset()
-		if err := bodyTpl.Execute(&buff, item); err != nil {
+		if err := bodyTpl.Execute(&buff, map[string]interface{}{
+			"Name":         item.Name,
+			"Detail":       item.Detail,
+			"Relations":    item.Relations,
+			"HasRelations": len(item.Relations) > 0,
+		}); err != nil {
 			_ = writer.Close()
 			return err
 		}

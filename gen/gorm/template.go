@@ -165,7 +165,7 @@ func List{{ .Name }}(offset, limit int64, order string, params map[string]interf
 	var list []{{ .Name }}
 	var err error
 
-	{{ if eq .Relation "" }}
+	{{ if eq .HasRelations false }}
 	if offset >= 0 && limit > 0 {
 		if order != "" {
 			err = db.Where(params).Order(order).Offset(offset).Limit(limit).Find(&list).Error
@@ -178,12 +178,12 @@ func List{{ .Name }}(offset, limit int64, order string, params map[string]interf
 	{{ else }}
 	if offset >= 0 && limit > 0 {
 		if order != "" {
-			err = db.Where(params).Preload("{{ .Relation }}").Order(order).Offset(offset).Limit(limit).Find(&list).Error
+			err = db.Where(params).{{ MakePreload .Relations }}.Order(order).Offset(offset).Limit(limit).Find(&list).Error
 		} else {
-			err = db.Where(params).Preload("{{ .Relation }}").Offset(offset).Limit(limit).Find(&list).Error
+			err = db.Where(params).{{ MakePreload .Relations }}.Offset(offset).Limit(limit).Find(&list).Error
 		}
 	} else {
-		err = db.Where(params).Preload("{{ .Relation }}").Order(order).Find(&list).Error
+		err = db.Where(params).{{ MakePreload .Relations }}.Order(order).Find(&list).Error
 	}
 	{{ end }}
 
