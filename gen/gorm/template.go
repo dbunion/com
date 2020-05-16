@@ -28,9 +28,9 @@ func InitDB(handler *gorm.DB) error {
 
 // Model - mode base struct define
 type Model struct {
-	ID        uint 
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID          uint 
+	CreatedTime time.Time
+	UpdatedTime time.Time
 }
 `
 
@@ -47,7 +47,7 @@ import (
 
 var templateBody = `
 // {{ .Name }} - {{ .Name | ToLower }} detail info
-{{ .Detail }}
+{{- .Detail }}
 
 // TableName Set {{ .Name }}'s table name to be '{{ .Name | ToSnake }}'
 func (m *{{ .Name }}) TableName() string {
