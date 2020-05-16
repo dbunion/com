@@ -258,6 +258,10 @@ func (h *Helm3) Version(flags []string) (*helm.BuildInfo, error) {
 
 // StartAndGC start file Helm adapter.
 func (h *Helm3) StartAndGC(cfg helm.Config) error {
+	if cfg.Cluster == nil || cfg.AuthInfo == nil {
+		return fmt.Errorf("invalid helm config")
+	}
+
 	h.cfg = cfg
 
 	// helm version check
@@ -270,18 +274,39 @@ func (h *Helm3) StartAndGC(cfg helm.Config) error {
 		return fmt.Errorf("invalid helm v3 version:%v", buildInfo.Version)
 	}
 
+	key := ""
+	if cfg.AuthType == helm.AuthTypeBasic {
+		key = cfg.Cluster.Server + cfg.AuthInfo.Username + cfg.AuthInfo.Password
+	} else if cfg.AuthType == helm.AuthTypeToken {
+		key = cfg.Cluster.Server + cfg.AuthInfo.Token + cfg.AuthInfo.TokenFile
+	} else if cfg.AuthType == helm.AuthTypeCert {
+		key = cfg.Cluster.Server + string(cfg.AuthInfo.ClientKeyData) + string(cfg.AuthInfo.ClientCertificateData)
+	} else {
+		return fmt.Errorf("invalid auth type %v", cfg.AuthType)
+	}
+
 	// init config file
-	h.tempFile = fmt.Sprintf("/tmp/%x.config", md5.Sum([]byte(cfg.Server+cfg.UserName+cfg.Password)))
+	h.tempFile = fmt.Sprintf("/tmp/%x.config", md5.Sum([]byte(key)))
 	fmt.Printf("tempFilePath: %v\n", h.tempFile)
 	if _, err := os.Open(h.tempFile); err != nil {
 		// build config content
-		tpl, err := template.New("config").Parse(configTemplate)
+		tpl, err := template.New("config").Parse(kubeConfigTemplate)
 		if err != nil {
 			return err
 		}
 
 		var buf bytes.Buffer
-		if err := tpl.Execute(&buf, map[string]interface{}{"UserName": cfg.UserName, "Password": cfg.Password, "Server": cfg.Server}); err != nil {
+		if err := tpl.Execute(&buf, map[string]interface{}{
+			"AuthType":                 string(cfg.AuthType),
+			"ClientCertificateData":    string(cfg.AuthInfo.ClientCertificateData),
+			"ClientKeyData":            string(cfg.AuthInfo.ClientKeyData),
+			"UserName":                 cfg.AuthInfo.Username,
+			"Password":                 cfg.AuthInfo.Password,
+			"Token":                    cfg.AuthInfo.Token,
+			"TokenFile":                cfg.AuthInfo.TokenFile,
+			"Server":                   cfg.Cluster.Server,
+			"CertificateAuthorityData": string(cfg.Cluster.CertificateAuthorityData),
+		}); err != nil {
 			return err
 		}
 
@@ -298,26 +323,40 @@ func (h *Helm3) StartAndGC(cfg helm.Config) error {
 	return nil
 }
 
-var configTemplate = `
+var kubeConfigTemplate = `
 apiVersion: v1
 kind: Config
-preferences: {}
+preferences:
+    colors: true
+current-context: helmCluster
 users:
-- name: kubecfg
-  user:
-    username: {{ .UserName }}
-    password: {{ .Password }}
+  - name: helmUser
+    user:
+      {{ if eq .AuthType "cert" -}}
+      client-certificate-data: {{ .ClientCertificateData }}
+      client-key-data: {{ .ClientKeyData -}}
+      {{ else if eq .AuthType "basic" -}}
+      username: {{ .UserName }}
+      password: {{ .Password }}
+      {{- else if eq .AuthType "token" -}}
+      token: {{ .Token -}}
+      {{ end }}
 clusters:
-- cluster:
-    insecure-skip-tls-verify: true
-    server: {{ .Server }}
-  name: cluster-auth
+  - name: helmCluster
+    cluster:
+      server: {{ .Server -}}
+      {{- if eq .AuthType "cert" }}
+      certificate-authority-data: {{ .CertificateAuthorityData -}}
+      {{- else if eq .AuthType "basic" }}
+      insecure-skip-tls-verify: true
+      {{- else if eq .AuthType "token" }}
+      insecure-skip-tls-verify: true
+      {{- end }}
 contexts:
-- context:
-    cluster: cluster-auth
-    user: kubecfg
-  name: cluster-auth
-current-context: cluster-auth
+  - context:
+      cluster: helmCluster
+      user: helmUser
+    name: helmCluster
 `
 
 func init() {
