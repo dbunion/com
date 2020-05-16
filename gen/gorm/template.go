@@ -46,8 +46,8 @@ import (
 `
 
 var templateBody = `
-// {{ .Name }} - {{ .Name | ToLower }} detail info
-{{- .Detail }}
+// {{ .Name }} - {{ .Name | ToLower -}} detail info
+{{ .Detail }}
 
 // TableName Set {{ .Name }}'s table name to be '{{ .Name | ToSnake }}'
 func (m *{{ .Name }}) TableName() string {
