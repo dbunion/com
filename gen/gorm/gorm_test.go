@@ -22,8 +22,8 @@ func TestGenAllInOne(t *testing.T) {
 }`,
 			},
 			{
-				Name: "TestCase",
-				Relation: "UserAgent",
+				Name:      "TestCase",
+				Relations: []string{"UserAgent"},
 				Detail: `type TestCase struct {
 	Model
 	Name string
@@ -61,8 +61,8 @@ func TestGenSegregate(t *testing.T) {
 }`,
 			},
 			{
-				Name: "TestCase",
-				Relation: "UserAgent",
+				Name:      "TestCase",
+				Relations: []string{"UserAgent", "TestCase"},
 				Detail: `type TestCase struct {
 	Model
 	Name string
