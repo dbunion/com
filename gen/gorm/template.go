@@ -28,9 +28,9 @@ func InitDB(handler *gorm.DB) error {
 
 // Model - mode base struct define
 type Model struct {
-	ID          uint 
-	CreatedTime time.Time
-	UpdatedTime time.Time
+	ID         uint 
+	CreateTime time.Time
+	UpdateTime time.Time
 }
 `
 
