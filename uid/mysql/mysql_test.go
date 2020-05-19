@@ -9,6 +9,41 @@ import (
 	"time"
 )
 
+func BenchmarkMyUID32(b *testing.B) {
+	s, err := uid.NewUID(uid.TypeMySQL, uid.Config{
+		Server:          "192.168.184.47",
+		Port:            3307,
+		User:            "root",
+		Password:        "secret",
+		InitValue:       1000,
+		Step:            10,
+		DBName:          "test",
+		TableName:       "int32_seq",
+		AutoCreateTable: true,
+	})
+
+	if err != nil {
+		b.Fatalf("start err:%v", err)
+		return
+	}
+
+	assert.NotNil(b, s)
+
+	for i := 0; i < b.N; i++ { //use b.N for looping
+		for j := 0; j < 5; j++ {
+			if s.HasInt32() {
+				sequence := s.NextUID32()
+				assert.NotEqual(b, -1, sequence)
+				b.Logf("Int32:%v ", sequence)
+			}
+		}
+	}
+
+	if err := s.Close(); err != nil {
+		b.Fatalf("close error:%v", err)
+	}
+}
+
 func TestNewMyUID32(t *testing.T) {
 	s, err := uid.NewUID(uid.TypeMySQL, uid.Config{
 		Server:          "127.0.0.1",

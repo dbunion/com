@@ -147,6 +147,7 @@ func (r *MyUID) NextUID32() int32 {
 
 	// request new cache
 	if err := r.next(); err != nil && err != errAlreadyCache {
+		fmt.Println(err)
 		return -1
 	}
 
@@ -154,7 +155,7 @@ func (r *MyUID) NextUID32() int32 {
 		return int32(atomic.AddInt64(&r.current, 1))
 	}
 
-	return -1
+	return r.NextUID32()
 }
 
 // NextUID64 - next int64 uid
@@ -171,6 +172,7 @@ func (r *MyUID) NextUID64() int64 {
 
 	// request new cache
 	if err := r.next(); err != nil && err != errAlreadyCache {
+		fmt.Println(err)
 		return -1
 	}
 
@@ -178,7 +180,7 @@ func (r *MyUID) NextUID64() int64 {
 		return atomic.AddInt64(&r.current, 1)
 	}
 
-	return -1
+	return r.NextUID64()
 }
 
 // Close - close connection
