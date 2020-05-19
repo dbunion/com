@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dbunion/com/uid"
-	// import mysql driver
-	_ "github.com/go-sql-driver/mysql"
 	"sync"
 	"sync/atomic"
 	"time"

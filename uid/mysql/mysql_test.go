@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"github.com/dbunion/com/uid"
+	// import mysql driver
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
