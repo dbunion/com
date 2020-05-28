@@ -126,9 +126,9 @@ func (g *GoOrm) genAllInOne() (gErr error) {
 	}
 
 	// gen body
-	for i := 0; i < len(g.cfg.Items); i++ {
+	for i := 0; i < len(g.cfg.ModelCfg.Items); i++ {
 		buff.Reset()
-		item := g.cfg.Items[i]
+		item := g.cfg.ModelCfg.Items[i]
 		if err := bodyTpl.Execute(&buff, map[string]interface{}{
 			"Name":         item.Name,
 			"Detail":       item.Detail,
@@ -151,8 +151,8 @@ func (g *GoOrm) genSegregate() (gErr error) {
 		return err
 	}
 
-	for i := 0; i < len(g.cfg.Items); i++ {
-		item := g.cfg.Items[i]
+	for i := 0; i < len(g.cfg.ModelCfg.Items); i++ {
+		item := g.cfg.ModelCfg.Items[i]
 
 		file := fmt.Sprintf("gen_%s.go", strcase.ToSnake(item.Name))
 		if g.cfg.GenPath != "" {

@@ -7,6 +7,8 @@ const (
 	TypeGormModel = "gorm_model"
 	// TypeBeegoModel - type beego model gen
 	TypeBeegoModel = "beego_model"
+	// TypeService - type service gen
+	TypeService = "service"
 )
 
 // Item - gen item
@@ -16,14 +18,33 @@ type Item struct {
 	Detail    string   `json:"detail"`
 }
 
-// Config - init config
-type Config struct {
-	Package      string `json:"package"`
-	GenPath      string `json:"gen_path"`
-	AllInOne     bool   `json:"all_in_one"`
+// ModelGenConfig - model config
+type ModelGenConfig struct {
 	Items        []Item `json:"items"`
 	MaxIdleConns int64  `json:"max_idle_conns"`
 	MaxOpenConns int64  `json:"set_max_open_conns"`
+}
+
+// SItem - service config item
+type SItem struct {
+	Req      interface{} `json:"req"`
+	Dst      interface{} `json:"dst"`
+	Index    int64       `json:"index"`
+	CheckApp bool        `json:"check_app"`
+}
+
+// ServiceGenConfig - service config
+type ServiceGenConfig struct {
+	Items []SItem `json:"items"`
+}
+
+// Config - init config
+type Config struct {
+	Package    string           `json:"package"`
+	GenPath    string           `json:"gen_path"`
+	AllInOne   bool             `json:"all_in_one"`
+	ModelCfg   ModelGenConfig   `json:"model_cfg"`
+	ServiceCfg ServiceGenConfig `json:"service_cfg"`
 }
 
 // Generator interface contains all behaviors for model generator adapter.

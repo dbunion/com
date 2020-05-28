@@ -20,15 +20,15 @@ func InitDB(handler *gorm.DB) error {
 	}
 
 	db = handler
-	db.DB().SetMaxIdleConns({{ .MaxIdleConns }})
-	db.DB().SetMaxOpenConns({{ .MaxOpenConns }})
+	db.DB().SetMaxIdleConns({{ .ModelCfg.MaxIdleConns }})
+	db.DB().SetMaxOpenConns({{ .ModelCfg.MaxOpenConns }})
 
 	return nil
 }
 
 // Model - mode base struct define
 type Model struct {
-	ID         uint 
+	ID         int64 
 	CreateTime time.Time
 	UpdateTime time.Time
 }
