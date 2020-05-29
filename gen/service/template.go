@@ -18,6 +18,18 @@ type List struct {
 	Data  interface{} ` + "`json:\"data\"`" + `
 }
 
+// Filter - is the param or list
+type Filter struct {
+	// @inject_tag: form:"offset"
+	Offset int64 ` + "`protobuf:\"varint,1,opt,name=offset,proto3\" json:\"offset,omitempty\" form:\"offset\"`" + `
+	// @inject_tag: form:"limit"
+	Limit int64 ` + "`protobuf:\"varint,2,opt,name=limit,proto3\" json:\"limit,omitempty\" form:\"limit\"`" + `
+	// @inject_tag: form:"order"
+	Order string ` + "`protobuf:\"bytes,3,opt,name=order,proto3\" json:\"order,omitempty\" form:\"order\"`" + `
+	// @inject_tag: form:"param"
+	Param string ` + "`protobuf:\"bytes,4,opt,name=param,proto3\" json:\"param,omitempty\" form:\"param\"`" + `
+}
+
 func buildParam(req interface{}, out interface{}) error {
 	rVal := reflect.ValueOf(req)
 	rType := reflect.TypeOf(req)
@@ -220,8 +232,7 @@ package {{ .Package }}
 import (
 	"context"
 	"fmt"
-	"github.com/zssky/Niffler/pkg/proto"
-	"github.com/zssky/Niffler/server/models"
+	"{{ .ImportModelPath }}"
 )
 
 const(
@@ -295,7 +306,7 @@ func Delete{{ .DstName }}(ctx context.Context, id int64) (int64, string, interfa
 }
 
 // List{{ .DstName }} - query {{ .DstName | ToSnake }} list
-func List{{ .DstName }}(ctx context.Context, param *proto.Filter) (int64, string, interface{}) {
+func List{{ .DstName }}(ctx context.Context, param *Filter) (int64, string, interface{}) {
 	list, err := models.List{{ .DstName }}(int64(param.Offset), int64(param.Limit), param.Order, param.Params())
 	if err != nil {
 		return ErrorList{{ .DstName }}, err.Error(), nil
