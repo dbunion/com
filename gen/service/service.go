@@ -133,6 +133,7 @@ func (b *Bot) genSegregate() (gErr error) {
 		buff.Reset()
 
 		if err := bodyTpl.Execute(&buff, map[string]interface{}{
+			"ImportProtoPath":  b.cfg.ServiceCfg.ImportProtoPath,
 			"ImportModelPath":  b.cfg.ServiceCfg.ImportModelPath,
 			"Package":          b.cfg.Package,
 			"DstName":          dstName,
