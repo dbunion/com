@@ -233,6 +233,9 @@ import (
 	"context"
 	"fmt"
 	"{{ .ImportModelPath }}"
+	{{ if ne .ImportProtoPath "" -}}
+	"{{ .ImportProtoPath }}"
+	{{ end }}
 )
 
 const(
