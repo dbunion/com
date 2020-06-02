@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	// TypeVtctlV3 - vtctl v3
-	TypeVtctlV3 = "vtctl_v3"
+	// TypeVtctlV6 - vtctl v6
+	TypeVtctlV6 = "vtctl_v6"
 )
 
 // ServerInfo - vtctld server info

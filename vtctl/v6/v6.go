@@ -1,4 +1,4 @@
-package v3
+package v6
 
 import (
 	"context"
@@ -50,15 +50,17 @@ func (c *client) withRetryFunc(ctx context.Context, action string, fun func() er
 		return fmt.Errorf("context is done, action:%v", action)
 	}
 
+	var lastError error
 	retryAttempts := 0
 	for r := retry.Start(*c.retryOption); r.Next(); retryAttempts++ {
 		if err := fun(); err != nil {
+			lastError = err
 			continue
 		}
 		break
 	}
 	if retryAttempts == c.retryOption.MaxRetries+1 {
-		return fmt.Errorf("with retry func reatch max retry count, action:%v", action)
+		return fmt.Errorf("with retry func reatch max retry count, action:%v lastError:%v", action, lastError)
 	}
 
 	return nil
@@ -158,5 +160,5 @@ func (e *eventStreamAdapter) Recv() (*logutilpb.Event, error) {
 }
 
 func init() {
-	vtctl.Register(vtctl.TypeVtctlV3, NewClient)
+	vtctl.Register(vtctl.TypeVtctlV6, NewClient)
 }

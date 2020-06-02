@@ -113,7 +113,7 @@ func Get{{ .Name }}(id int64) (*{{ .Name }}, error) {
 }
 
 // Get{{ .Name }}ByKey - query {{ .Name | ToSnake }} info by key
-func Get{{ .Name }}ByKey(key, value string) (*{{ .Name }}, error) {
+func Get{{ .Name }}ByKey(key string, value interface{}) (*{{ .Name }}, error) {
 	val := &{{ .Name }}{}
 	v := db.Where(fmt.Sprintf("%s = ?", key), value).Find(val)
 	if v.Error != nil {
@@ -142,7 +142,7 @@ func Delete{{ .Name }} (id int64) (int64, error) {
 }
 
 // Delete{{ .Name }}ByKey - remove {{ .Name | ToSnake }} info by key
-func Delete{{ .Name }}ByKey(key, value string) (int64, error) {
+func Delete{{ .Name }}ByKey(key string, value interface{}) (int64, error) {
 	v := db.Where(fmt.Sprintf("%s = ?", key), value).Delete(&{{ .Name }}{})
 	if v.Error != nil {
 		return 0, v.Error

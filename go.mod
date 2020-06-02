@@ -36,4 +36,4 @@ require (
 	vitess.io/vitess v0.0.0-00010101000000-000000000000
 )
 
-replace vitess.io/vitess => vitess.io/vitess v0.0.0-20181209180904-4f192d1003d1
+replace vitess.io/vitess => vitess.io/vitess v0.0.0-20200524212726-2bbe82266007
