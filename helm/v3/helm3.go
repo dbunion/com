@@ -271,7 +271,7 @@ func (h *Helm3) StartAndGC(cfg helm.Config) error {
 	}
 
 	if !strings.HasPrefix(strings.ToLower(buildInfo.Version), "v3.") {
-		return fmt.Errorf("invalid helm v3 version:%v", buildInfo.Version)
+		return fmt.Errorf("invalid helm v6 version:%v", buildInfo.Version)
 	}
 
 	key := ""

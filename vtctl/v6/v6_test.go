@@ -1,4 +1,4 @@
-package v3
+package v6
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 )
 
 func TestRunCommand(t *testing.T) {
-	client, err := vtctl.NewClient(vtctl.TypeVtctlV3, vtctl.Config{
+	client, err := vtctl.NewClient(vtctl.TypeVtctlV6, vtctl.Config{
 		RetryOption: nil,
 		Servers: map[string]vtctl.ServerInfo{
 			"test": {
