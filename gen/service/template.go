@@ -250,29 +250,38 @@ const(
 )
 
 // Add{{ .DstName }} - create a new {{ .DstName | ToSnake }}
-func Add{{ .DstName}}(ctx context.Context, req *proto.{{ .ReqName }}) (int64, string, interface{}) {
+func Add{{ .DstName}}(ctx context.Context, req *proto.{{ .ReqName }}) (int64, string, int64) {
 	{{ if eq .CheckApp true }} 
 	// check whether app is exist
 	if _, err := models.GetApp(req.AppId); err != nil {
-		return {{ .DstName }}InvalidParams, fmt.Sprintf("query by appID err, err:%v", err.Error()), nil
+		return {{ .DstName }}InvalidParams, fmt.Sprintf("query by appID err, err:%v", err.Error()), 0
 	}
 	{{ end }}
 
 	{{ .DstConstruct }}
 	id, err := models.Add{{ .DstName }}(val)
 	if err != nil {
-		return ErrorCreate{{ .DstName }}, err.Error(), nil
+		return ErrorCreate{{ .DstName }}, err.Error(), 0
 	}
 	return {{ .DstName }}Success, fmt.Sprintf("create {{ .DstName | ToSnake }} success, id:%v", id), id
 }
 
 // Get{{ .DstName }} - query {{ .DstName | ToSnake }}
-func Get{{ .DstName }}(ctx context.Context, id int64) (int64, string, interface{}) {
+func Get{{ .DstName }}(ctx context.Context, id int64) (int64, string, *proto.{{ .ReqName }}) {
 	val, err := models.Get{{ .DstName }}(id)
 	if err != nil {
 		return ErrorQuery{{ .DstName }}, err.Error(), nil
 	}
 	return {{ .DstName }}Success, "query {{ .DstName | ToSnake }} success", convert{{ .DstName }}(val)
+}
+
+// Get{{ .DstName }}ByKey - query {{ .DstName | ToSnake }} by key and value
+func Get{{ .DstName }}ByKey(ctx context.Context, id int64) (int64, string, *proto.{{ .ReqName }}) {
+	val, err := models.Get{{ .DstName }}ByKey(id)
+	if err != nil {
+		return ErrorQuery{{ .DstName }}, err.Error(), nil
+	}
+	return {{ .DstName }}Success, "query {{ .DstName | ToSnake }} by key success", convert{{ .DstName }}(val)
 }
 
 // Update{{ .DstName }} - update {{ .DstName | ToSnake }}
@@ -308,8 +317,17 @@ func Delete{{ .DstName }}(ctx context.Context, id int64) (int64, string, interfa
 	return {{ .DstName }}Success, fmt.Sprintf("delete {{ .DstName | ToSnake }} success, affected count:%v", rowAffected), nil
 }
 
+// Delete{{ .DstName }}ByKey - delete {{ .DstName | ToSnake }} by key
+func Delete{{ .DstName }}ByKey(ctx context.Context, id int64) (int64, string, interface{}) {
+	rowAffected, err := models.Delete{{ .DstName }}ByKey(id)
+	if err != nil {
+		return ErrorDelete{{ .DstName }}, err.Error(), nil
+	}
+	return {{ .DstName }}Success, fmt.Sprintf("delete {{ .DstName | ToSnake }} by key success, affected count:%v", rowAffected), nil
+}
+
 // List{{ .DstName }} - query {{ .DstName | ToSnake }} list
-func List{{ .DstName }}(ctx context.Context, param *Filter) (int64, string, interface{}) {
+func List{{ .DstName }}(ctx context.Context, param *Filter) (int64, string, *List) {
 	list, err := models.List{{ .DstName }}(int64(param.Offset), int64(param.Limit), param.Order, param.Params())
 	if err != nil {
 		return ErrorList{{ .DstName }}, err.Error(), nil
@@ -324,6 +342,6 @@ func List{{ .DstName }}(ctx context.Context, param *Filter) (int64, string, inte
 	if err != nil {
 		return ErrorList{{ .DstName }}, err.Error(), nil
 	}
-	return {{ .DstName }}Success, "list {{ .DstName | ToSnake }} success", api.List{Total: total, Data: resp}
+	return {{ .DstName }}Success, "list {{ .DstName | ToSnake }} success", &List{Total: total, Data: resp}
 }
 `
