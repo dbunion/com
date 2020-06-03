@@ -30,6 +30,28 @@ type Filter struct {
 	Param string ` + "`protobuf:\"bytes,4,opt,name=param,proto3\" json:\"param,omitempty\" form:\"param\"`" + `
 }
 
+// Params - convert string param to mapping
+func (m *Filter) Params() map[string]interface{} {
+	arr := strings.Split(m.Param, ",")
+	if len(arr) <= 0 {
+		return nil
+	}
+
+	param := make(map[string]interface{})
+	for i := 0; i < len(arr); i++ {
+		items := strings.Split(arr[i], ":")
+		if len(items) != 2 {
+			continue
+		}
+
+		key := items[0]
+		value := items[1]
+		param[key] = value
+	}
+	return param
+}
+
+
 func buildParam(req interface{}, out interface{}) error {
 	rVal := reflect.ValueOf(req)
 	rType := reflect.TypeOf(req)
@@ -333,7 +355,7 @@ func List{{ .DstName }}(ctx context.Context, param *Filter) (int64, string, *Lis
 		return ErrorList{{ .DstName }}, err.Error(), nil
 	}
 
-	resp := make([]*proto.{{ .DstName }}, 0)
+	resp := make([]*proto.{{ .ReqName }}, 0)
 	for i := 0; i < len(list); i++ {
 		resp = append(resp, convert{{ .DstName }}(&list[i]))
 	}
