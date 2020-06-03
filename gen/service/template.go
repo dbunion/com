@@ -276,8 +276,8 @@ func Get{{ .DstName }}(ctx context.Context, id int64) (int64, string, *proto.{{ 
 }
 
 // Get{{ .DstName }}ByKey - query {{ .DstName | ToSnake }} by key and value
-func Get{{ .DstName }}ByKey(ctx context.Context, id int64) (int64, string, *proto.{{ .ReqName }}) {
-	val, err := models.Get{{ .DstName }}ByKey(id)
+func Get{{ .DstName }}ByKey(ctx context.Context, key string, value interface{}) (int64, string, *proto.{{ .ReqName }}) {
+	val, err := models.Get{{ .DstName }}ByKey(key, value)
 	if err != nil {
 		return ErrorQuery{{ .DstName }}, err.Error(), nil
 	}
@@ -318,8 +318,8 @@ func Delete{{ .DstName }}(ctx context.Context, id int64) (int64, string, interfa
 }
 
 // Delete{{ .DstName }}ByKey - delete {{ .DstName | ToSnake }} by key
-func Delete{{ .DstName }}ByKey(ctx context.Context, id int64) (int64, string, interface{}) {
-	rowAffected, err := models.Delete{{ .DstName }}ByKey(id)
+func Delete{{ .DstName }}ByKey(ctx context.Context, key string, value interface{}) (int64, string, interface{}) {
+	rowAffected, err := models.Delete{{ .DstName }}ByKey(key, value)
 	if err != nil {
 		return ErrorDelete{{ .DstName }}, err.Error(), nil
 	}
