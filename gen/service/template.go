@@ -12,46 +12,6 @@ import (
 	"strings"
 )
 
-// List - api list data
-type List struct {
-	Total int64       ` + "`json:\"total\"`" + `
-	Data  interface{} ` + "`json:\"data\"`" + `
-}
-
-// Filter - is the param or list
-type Filter struct {
-	// @inject_tag: form:"offset"
-	Offset int64 ` + "`protobuf:\"varint,1,opt,name=offset,proto3\" json:\"offset,omitempty\" form:\"offset\"`" + `
-	// @inject_tag: form:"limit"
-	Limit int64 ` + "`protobuf:\"varint,2,opt,name=limit,proto3\" json:\"limit,omitempty\" form:\"limit\"`" + `
-	// @inject_tag: form:"order"
-	Order string ` + "`protobuf:\"bytes,3,opt,name=order,proto3\" json:\"order,omitempty\" form:\"order\"`" + `
-	// @inject_tag: form:"param"
-	Param string ` + "`protobuf:\"bytes,4,opt,name=param,proto3\" json:\"param,omitempty\" form:\"param\"`" + `
-}
-
-// Params - convert string param to mapping
-func (m *Filter) Params() map[string]interface{} {
-	arr := strings.Split(m.Param, ",")
-	if len(arr) <= 0 {
-		return nil
-	}
-
-	param := make(map[string]interface{})
-	for i := 0; i < len(arr); i++ {
-		items := strings.Split(arr[i], ":")
-		if len(items) != 2 {
-			continue
-		}
-
-		key := items[0]
-		value := items[1]
-		param[key] = value
-	}
-	return param
-}
-
-
 func buildParam(req interface{}, out interface{}) error {
 	rVal := reflect.ValueOf(req)
 	rType := reflect.TypeOf(req)
@@ -254,9 +214,8 @@ package {{ .Package }}
 import (
 	"context"
 	"fmt"
-	"{{ .ImportModelPath }}"
-	{{ if ne .ImportProtoPath "" -}}
-	"{{ .ImportProtoPath }}"
+	{{ range $index, $path := .ImportPaths -}}
+	"{{- $path -}}"
 	{{ end }}
 )
 
@@ -349,7 +308,7 @@ func Delete{{ .DstName }}ByKey(ctx context.Context, key string, value interface{
 }
 
 // List{{ .DstName }} - query {{ .DstName | ToSnake }} list
-func List{{ .DstName }}(ctx context.Context, param *Filter) (int64, string, *List) {
+func List{{ .DstName }}(ctx context.Context, param *proto.Filter) (int64, string, *proto.List) {
 	list, err := models.List{{ .DstName }}(int64(param.Offset), int64(param.Limit), param.Order, param.Params())
 	if err != nil {
 		return ErrorList{{ .DstName }}, err.Error(), nil
@@ -364,6 +323,16 @@ func List{{ .DstName }}(ctx context.Context, param *Filter) (int64, string, *Lis
 	if err != nil {
 		return ErrorList{{ .DstName }}, err.Error(), nil
 	}
-	return {{ .DstName }}Success, "list {{ .DstName | ToSnake }} success", &List{Total: total, Data: resp}
+	return {{ .DstName }}Success, "list {{ .DstName | ToSnake }} success", &proto.List{Total: total, Data: resp}
 }
+
+func convert{{ .DstName }}(req *models.{{ .DstName }}) *proto.{{ .ReqName }} {
+	if req == nil {
+		return nil
+	}
+
+	{{ .ConvertConstruct }}
+	return val
+}
+
 `

@@ -133,15 +133,14 @@ func (b *Bot) genSegregate() (gErr error) {
 		buff.Reset()
 
 		if err := bodyTpl.Execute(&buff, map[string]interface{}{
-			"ImportProtoPath":  b.cfg.ServiceCfg.ImportProtoPath,
-			"ImportModelPath":  b.cfg.ServiceCfg.ImportModelPath,
+			"ImportPaths":      b.cfg.ServiceCfg.ImportPaths,
 			"Package":          b.cfg.Package,
 			"DstName":          dstName,
 			"ReqName":          reqName,
 			"Req":              req,
 			"Dst":              dst,
-			"DstConstruct":     makeConstruct(req, dst),
-			"ConvertConstruct": makeConstruct(dst, req),
+			"DstConstruct":     makeConstruct(req, dst, false),
+			"ConvertConstruct": makeConstruct(dst, req, true),
 			"Index":            index,
 			"CheckApp":         item.CheckApp,
 		}); err != nil {
@@ -168,7 +167,7 @@ func (b *Bot) genSegregate() (gErr error) {
 func constructField(reqField reflect.StructField, dstField reflect.StructField) string {
 	needCheckType := false
 	if strings.EqualFold(strings.ToLower(reqField.Name), strings.ToLower(dstField.Name)) {
-		if reqField.Type.Kind() == dstField.Type.Kind() {
+		if reqField.Type.Kind() == dstField.Type.Kind() && reqField.Type.Kind() != reflect.Ptr {
 			return fmt.Sprintf("%s: req.%s,\n", dstField.Name, reqField.Name)
 		}
 		needCheckType = true
@@ -196,8 +195,15 @@ func constructField(reqField reflect.StructField, dstField reflect.StructField) 
 			return fmt.Sprintf("%s: int32(req.%s),\n", dstField.Name, reqField.Name)
 		case reflect.Int64:
 			return fmt.Sprintf("%s: int64(req.%s),\n", dstField.Name, reqField.Name)
+		case reflect.Float32:
+			return fmt.Sprintf("%s: float32(req.%s),\n", dstField.Name, reqField.Name)
+		case reflect.Float64:
+			return fmt.Sprintf("%s: float64(req.%s),\n", dstField.Name, reqField.Name)
 		case reflect.Struct:
-
+		case reflect.Ptr:
+			if strings.Contains(string(reqField.Tag), "gorm") {
+				return fmt.Sprintf("%s: convert%s(req.%s),\n", dstField.Name, reqField.Type.Elem().Name(), reqField.Name)
+			}
 		default:
 			return fmt.Sprintf("%s: req.%s,\n", dstField.Name, reqField.Name)
 		}
@@ -205,7 +211,7 @@ func constructField(reqField reflect.StructField, dstField reflect.StructField) 
 	return ""
 }
 
-func makeConstruct(req interface{}, dst interface{}) string {
+func makeConstruct(req interface{}, dst interface{}, genModel bool) string {
 	reqTyp := reflect.TypeOf(req)
 	dstTyp := reflect.TypeOf(dst)
 
@@ -230,6 +236,13 @@ func makeConstruct(req interface{}, dst interface{}) string {
 			}
 		}
 	}
+
+	if genModel {
+		fmt.Fprint(&buffer, "Id: req.ID,\n")
+		fmt.Fprint(&buffer, "CreateTime: req.CreateTime.Format(\"2006-01-02 15:04:05\"),\n")
+		fmt.Fprint(&buffer, "UpdateTime: req.UpdateTime.Format(\"2006-01-02 15:04:05\"),\n")
+	}
+
 	fmt.Fprintf(&buffer, "}\n")
 
 	return buffer.String()
