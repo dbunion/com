@@ -35,8 +35,10 @@ func TestGenSegregate(t *testing.T) {
 		GenPath:  "/tmp",
 		AllInOne: false,
 		ServiceCfg: gen.ServiceGenConfig{
-			ImportProtoPath: "github.com/dbunion/proto",
-			ImportModelPath: "github.com/dbunion/com",
+			ImportPaths: []string{
+				"github.com/dbunion/proto",
+				"github.com/dbunion/com",
+			},
 			Items: []gen.SItem{
 				appItem,
 			},

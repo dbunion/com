@@ -35,9 +35,10 @@ type SItem struct {
 
 // ServiceGenConfig - service config
 type ServiceGenConfig struct {
-	Items           []SItem `json:"items"`
-	ImportProtoPath string  `json:"import_proto_path"`
-	ImportModelPath string  `json:"import_model_path"`
+	Items       []SItem         `json:"items"`
+	ImportPaths []string        `json:"import_paths"`
+	IgnoreName  map[string]bool `json:"ignore_name"`
+	KeepName    map[string]bool `json:"keep_name"`
 }
 
 // Config - init config
