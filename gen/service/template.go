@@ -10,6 +10,8 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/iancoleman/strcase"
 )
 
 func buildParam(req interface{}, out interface{}, fields []string) (map[string]interface{}, error) {
