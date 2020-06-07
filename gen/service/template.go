@@ -12,7 +12,8 @@ import (
 	"strings"
 )
 
-func buildParam(req interface{}, out interface{}) error {
+func buildParam(req interface{}, out interface{}, fields []string) (map[string]interface{}, error) {
+	mapping := make(map[string]interface{})
 	rVal := reflect.ValueOf(req)
 	rType := reflect.TypeOf(req)
 	if rType.Kind() == reflect.Ptr {
@@ -27,98 +28,48 @@ func buildParam(req interface{}, out interface{}) error {
 		oType = oType.Elem()
 	}
 
-	for index := 0; index < rType.NumField(); index++ {
-		reqTypeField := rType.Field(index)
-		reqValueField := rVal.Field(index)
-		reqJSONTagName := strings.Replace(reqTypeField.Tag.Get("json"), ",omitempty", "", -1)
+	for i := 0; i < len(fields); i++ {
+		fieldName := fields[i]
+		name := strcase.ToCamel(fields[i])
+		rActualVal := rVal.FieldByName(name)
+		oActualVal := oVal.FieldByName(name)
 
-		// out
-		for j := 0; j < oType.NumField(); j++ {
-			respTypeField := oType.Field(j)
-			respValueField := oVal.Field(j)
-			respJSONTagName := strings.Replace(respTypeField.Tag.Get("json"), ",omitempty", "", -1)
-
-			if reqJSONTagName != respJSONTagName {
-				continue
+		// compare value and set
+		switch rActualVal.Kind() {
+		case reflect.String:
+			src := rActualVal.String()
+			target := oActualVal.String()
+			if src != target {
+				oActualVal.SetString(src)
+				mapping[fieldName] = src
 			}
-
-			// compare value and set
-			switch respValueField.Kind() {
-			case reflect.String:
-				src := reqValueField.String()
-				target := respValueField.String()
-				if src != target {
-					respValueField.SetString(src)
-				}
-			case reflect.Int, reflect.Int32, reflect.Int64, reflect.Int8, reflect.Int16:
-				src := reqValueField.Int()
-				target := respValueField.Int()
-				if src != target {
-					respValueField.SetInt(src)
-				}
-			case reflect.Float32, reflect.Float64:
-				src := reqValueField.Float()
-				target := respValueField.Float()
-				if src != target {
-					respValueField.SetFloat(src)
-				}
-			case reflect.Bool:
-				src := reqValueField.Bool()
-				target := respValueField.Bool()
-				if src != target {
-					respValueField.SetBool(src)
-				}
-			default:
-				fmt.Printf("unknow type")
+		case reflect.Int, reflect.Int32, reflect.Int64, reflect.Int8, reflect.Int16:
+			src := rActualVal.Int()
+			target := oActualVal.Int()
+			if src != target {
+				oActualVal.SetInt(src)
+				mapping[fieldName] = src
 			}
+		case reflect.Float32, reflect.Float64:
+			src := rActualVal.Float()
+			target := oActualVal.Float()
+			if src != target {
+				oActualVal.SetFloat(src)
+				mapping[fieldName] = src
+			}
+		case reflect.Bool:
+			src := rActualVal.Bool()
+			target := oActualVal.Bool()
+			if src != target {
+				oActualVal.SetBool(src)
+				mapping[fieldName] = src
+			}
+		default:
+			fmt.Printf("unknow type")
 		}
 	}
-	return nil
-}
 
-func buildParamWithFields(req interface{}, fields []string) map[string]interface{} {
-	rVal := reflect.ValueOf(req)
-	rType := reflect.TypeOf(req)
-	if rType.Kind() == reflect.Ptr {
-		rVal = rVal.Elem()
-		rType = rType.Elem()
-	}
-
-	resp := make(map[string]interface{})
-
-	for index := 0; index < rType.NumField(); index++ {
-		reqTypeField := rType.Field(index)
-		reqValueField := rVal.Field(index)
-		reqJSONTagName := strings.Replace(reqTypeField.Tag.Get("json"), ",omitempty", "", -1)
-
-		// out
-		for j := 0; j < len(fields); j++ {
-			fieldTagName := fields[j]
-
-			if reqJSONTagName != fieldTagName {
-				continue
-			}
-
-			// compare value and set
-			switch reqValueField.Kind() {
-			case reflect.String:
-				src := reqValueField.String()
-				resp[reqTypeField.Name] = src
-			case reflect.Int, reflect.Int32, reflect.Int64, reflect.Int8, reflect.Int16:
-				src := reqValueField.Int()
-				resp[reqTypeField.Name] = src
-			case reflect.Float32, reflect.Float64:
-				src := reqValueField.Float()
-				resp[reqTypeField.Name] = src
-			case reflect.Bool:
-				src := reqValueField.Bool()
-				resp[reqTypeField.Name] = src
-			default:
-				fmt.Printf("unknow type")
-			}
-		}
-	}
-	return resp
+	return mapping, nil
 }
 
 // checkAppName - check app name format
@@ -273,13 +224,9 @@ func Update{{ .DstName }}(ctx context.Context, req *proto.{{ .ReqName }}, fields
 		return ErrorQuery{{ .DstName }}, err.Error(), nil
 	}
 
-	if err := buildParam(req, val); err != nil {
+	params, err := buildParam(req, val, fields)
+	if err != nil {
 		return {{ .DstName }}InvalidParams, err.Error(), nil
-	}
-
-	var params map[string]interface{}
-	if len(fields) > 0 {
-		params = buildParamWithFields(val, fields)
 	}
 
 	rowAffected, err := models.Edit{{ .DstName }}(val, params)
