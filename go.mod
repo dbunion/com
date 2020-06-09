@@ -33,7 +33,5 @@ require (
 	k8s.io/client-go v0.18.2
 	k8s.io/utils v0.0.0-20200414100711-2df71ebbae66 // indirect
 	sigs.k8s.io/yaml v1.2.0
-	vitess.io/vitess v0.0.0-00010101000000-000000000000
+	vitess.io/vitess v0.0.0-20200524212726-2bbe82266007
 )
-
-replace vitess.io/vitess => vitess.io/vitess v0.0.0-20200524212726-2bbe82266007
