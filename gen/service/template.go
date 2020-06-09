@@ -20,14 +20,12 @@ func buildParam(req interface{}, out interface{}, fields []string) (map[string]i
 	rType := reflect.TypeOf(req)
 	if rType.Kind() == reflect.Ptr {
 		rVal = rVal.Elem()
-		rType = rType.Elem()
 	}
 
 	oVal := reflect.ValueOf(out)
 	oType := reflect.TypeOf(out)
 	if oType.Kind() == reflect.Ptr {
 		oVal = oVal.Elem()
-		oType = oType.Elem()
 	}
 
 	for i := 0; i < len(fields); i++ {
