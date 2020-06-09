@@ -14,7 +14,6 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
-	github.com/jinzhu/gorm v1.9.12 // indirect
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.6.0 // indirect

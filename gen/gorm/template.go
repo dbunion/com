@@ -7,7 +7,7 @@ package {{ .Package }}
 
 import (
 	"errors"
-	"github.com/jinzhu/gorm"
+	"github.com/go-gorm/gorm"
 	"time"
 )
 
@@ -41,7 +41,7 @@ package {{ .Package }}
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
+	"github.com/go-gorm/gorm"
 )
 
 `
