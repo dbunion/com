@@ -12,6 +12,7 @@ import (
 )
 
 var db *gorm.DB
+var dialect string
 
 // InitDB - init db handler
 func InitDB(handler *gorm.DB) error {
@@ -64,9 +65,16 @@ func Add{{ .Name }}(val *{{ .Name }}) (int64, error) {
 	}
 
 	var id []int64
-	if err := txn.Raw("select LAST_INSERT_ID() as id").Pluck("id", &id).Error; err != nil {
-		txn.Rollback()
-		return 0, err
+	if dialect != "sqlite3" {
+		if err := txn.Raw("select LAST_INSERT_ID() as id").Pluck("id", &id).Error; err != nil {
+			txn.Rollback()
+			return 0, err
+		}
+	} else {
+		if err := txn.Raw("select last_insert_rowid() as id").Pluck("id", &id).Error; err != nil {
+			txn.Rollback()
+			return 0, err
+		}
 	}
 
 	if err := txn.Commit().Error; err != nil {
@@ -89,9 +97,16 @@ func Add{{ .Name }}Batch(items []*{{ .Name }}) (int64, error) {
 	}
 
 	var id []int64
-	if err := txn.Raw("select LAST_INSERT_ID() as id").Pluck("id", &id).Error; err != nil {
-		txn.Rollback()
-		return 0, err
+	if dialect != "sqlite3" {
+		if err := txn.Raw("select LAST_INSERT_ID() as id").Pluck("id", &id).Error; err != nil {
+			txn.Rollback()
+			return 0, err
+		}
+	} else {
+		if err := txn.Raw("select last_insert_rowid() as id").Pluck("id", &id).Error; err != nil {
+			txn.Rollback()
+			return 0, err
+		}
 	}
 
 	if err := txn.Commit().Error; err != nil {
@@ -193,3 +208,4 @@ func List{{ .Name }}(offset, limit int64, order string, params map[string]interf
 
 	return list, nil
 }`
+
