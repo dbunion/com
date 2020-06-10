@@ -21,6 +21,8 @@ func InitDB(handler *gorm.DB) error {
 	}
 
 	db = handler
+	dialect = handler.Dialect().GetName()
+
 	db.DB().SetMaxIdleConns({{ .ModelCfg.MaxIdleConns }})
 	db.DB().SetMaxOpenConns({{ .ModelCfg.MaxOpenConns }})
 
