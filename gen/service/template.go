@@ -198,6 +198,29 @@ func Add{{ .DstName}}(ctx context.Context, req *proto.{{ .ReqName }}) (int64, st
 	return {{ .DstName }}Success, fmt.Sprintf("create {{ .DstName | ToSnake }} success, id:%v", id), id
 }
 
+// BatchAdd{{ .DstName }} - batch create {{ .DstName | ToSnake }}
+func BatchAdd{{ .DstName }}(ctx context.Context, reqs []*proto.{{ .ReqName }}) (int64, string, int64) {
+	vals := make([]*models.{{ .DstName }}, len(reqs))
+	for i := 0; i < len(reqs); i++ {
+		req := reqs[i]
+		{{ if eq .CheckApp true }} 
+		// check whether app is exist
+		if _, err := models.GetApp(req.AppId); err != nil {
+			return {{ .DstName }}InvalidParams, fmt.Sprintf("query by appID err, err:%v", err.Error()), 0
+		}
+		{{ end }}
+
+		{{ .DstConstruct }}
+		vals[i] = val 
+	}
+
+	id, err := models.Add{{ .DstName }}Batch(vals)
+	if err != nil {
+		return ErrorCreate{{ .DstName }}, err.Error(), 0
+	}
+	return {{ .DstName }}Success, fmt.Sprintf("batch create {{ .DstName | ToSnake }} success, id:%v", id), id
+}
+
 // Get{{ .DstName }} - query {{ .DstName | ToSnake }}
 func Get{{ .DstName }}(ctx context.Context, id int64) (int64, string, *proto.{{ .ReqName }}) {
 	val, err := models.Get{{ .DstName }}(id)
