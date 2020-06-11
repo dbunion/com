@@ -28,6 +28,7 @@ func TestGenSegregate(t *testing.T) {
 		Req:   &ServiceApp{},
 		Dst:   &ModelApp{},
 		Index: 15000,
+		CheckApp: true,
 	}
 
 	generator, err := gen.NewGenerator(gen.TypeService, gen.Config{
