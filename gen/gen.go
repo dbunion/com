@@ -31,6 +31,7 @@ type SItem struct {
 	Dst      interface{} `json:"dst"`
 	Index    int64       `json:"index"`
 	CheckApp bool        `json:"check_app"`
+	ViewCfg  ViewConfig  `json:"view_cfg"`
 }
 
 // ServiceGenConfig - service config
@@ -39,7 +40,6 @@ type ServiceGenConfig struct {
 	ImportPaths []string        `json:"import_paths"`
 	IgnoreName  map[string]bool `json:"ignore_name"`
 	KeepName    map[string]bool `json:"keep_name"`
-	ViewCfg     ViewConfig      `json:"view_cfg"`
 }
 
 // ViewConfig - view gen config
