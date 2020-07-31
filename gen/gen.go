@@ -39,6 +39,14 @@ type ServiceGenConfig struct {
 	ImportPaths []string        `json:"import_paths"`
 	IgnoreName  map[string]bool `json:"ignore_name"`
 	KeepName    map[string]bool `json:"keep_name"`
+	ViewCfg     ViewConfig      `json:"view_cfg"`
+}
+
+// ViewConfig - view gen config
+type ViewConfig struct {
+	Enable     bool              `json:"enable"`
+	Mapping    map[string]string `json:"mapping"`
+	RelMapping map[string]string `json:"relation_mapping"`
 }
 
 // Config - init config
