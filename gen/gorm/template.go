@@ -210,4 +210,3 @@ func List{{ .Name }}(offset, limit int64, order string, params map[string]interf
 
 	return list, nil
 }`
-

@@ -25,9 +25,10 @@ type ModelApp struct {
 
 func TestGenSegregate(t *testing.T) {
 	appItem := gen.SItem{
-		Req:   &ServiceApp{},
-		Dst:   &ModelApp{},
-		Index: 15000,
+		Req:      &ServiceApp{},
+		Dst:      &ModelApp{},
+		Index:    15000,
+		CheckApp: true,
 	}
 
 	generator, err := gen.NewGenerator(gen.TypeService, gen.Config{
