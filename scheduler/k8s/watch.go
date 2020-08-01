@@ -2,8 +2,6 @@ package k8s
 
 import (
 	"github.com/dbunion/com/scheduler"
-	appsv1 "k8s.io/api/apps/v1"
-	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/watch"
 )
 
@@ -53,61 +51,6 @@ func (w *k8sWatcher) processEvent(e watch.Event) scheduler.WatchEvent {
 	var event scheduler.WatchEvent
 	var object scheduler.Object
 	event.Type = scheduler.EventType(e.Type)
-
-	versionKind := e.Object.GetObjectKind().GroupVersionKind()
-	switch versionKind.Kind {
-	case "ConfigMap":
-		cf, ok := e.Object.(*v1.ConfigMap)
-		if ok {
-			object = cf
-		}
-	case "Namespace":
-		ns, ok := e.Object.(*v1.Namespace)
-		if ok {
-			object = ns
-		}
-	case "Node":
-		node, ok := e.Object.(*v1.Node)
-		if ok {
-			object = node
-		}
-	case "Pod":
-		pod, ok := e.Object.(*v1.Pod)
-		if ok {
-			object = pod
-		}
-	case "ReplicationController":
-		rc, ok := e.Object.(*v1.ReplicationController)
-		if ok {
-			object = rc
-		}
-	case "Service":
-		svc, ok := e.Object.(*v1.Service)
-		if ok {
-			object = svc
-		}
-	case "Deployment":
-		dpl, ok := e.Object.(*appsv1.Deployment)
-		if ok {
-			object = dpl
-		}
-	case "ReplicaSet":
-		rs, ok := e.Object.(*appsv1.ReplicaSet)
-		if ok {
-			object = rs
-		}
-	case "StatefulSet":
-		sts, ok := e.Object.(*appsv1.StatefulSet)
-		if ok {
-			object = sts
-		}
-	case "DaemonSet":
-		ds, ok := e.Object.(*appsv1.DaemonSet)
-		if ok {
-			object = ds
-		}
-	}
-
 	event.Object = object
 	return event
 }
