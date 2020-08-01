@@ -55,44 +55,44 @@ func (w *k8sWatcher) processEvent(e watch.Event) scheduler.WatchEvent {
 	event.Type = scheduler.EventType(e.Type)
 
 	if cf, ok := e.Object.(*v1.ConfigMap); ok {
-		object = cf
+		object = convertToConfig(cf)
 	}
 
 	if ns, ok := e.Object.(*v1.Namespace); ok {
-		object = ns
+		object = convertToNamespace(ns)
 	}
 
 
 	if node, ok := e.Object.(*v1.Node); ok {
-		object = node
+		object = convertToNode(node)
 	}
 
 	if pod, ok := e.Object.(*v1.Pod); ok {
-		object = pod
+		object = convertToPod(pod)
 	}
 
 	if rc, ok := e.Object.(*v1.ReplicationController); ok {
-		object = rc
+		object = convertToRC(rc)
 	}
 
 	if svc, ok := e.Object.(*v1.Service); ok {
-		object = svc
+		object = convertToService(svc)
 	}
 
 	if dpl, ok := e.Object.(*appsv1.Deployment); ok {
-		object = dpl
+		object = convertToDeployment(dpl)
 	}
 
 	if rs, ok := e.Object.(*appsv1.ReplicaSet); ok {
-		object = rs
+		object = convertToReplicaSet(rs)
 	}
 
 	if sts, ok := e.Object.(*appsv1.StatefulSet); ok {
-		object = sts
+		object = convertToSTS(sts)
 	}
 
 	if ds, ok := e.Object.(*appsv1.DaemonSet); ok {
-		object = ds
+		object = convertToDaemonSet(ds)
 	}
 
 	event.Object = object
