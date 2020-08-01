@@ -2,6 +2,8 @@ package k8s
 
 import (
 	"github.com/dbunion/com/scheduler"
+	appsv1 "k8s.io/api/apps/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/watch"
 )
 
@@ -51,6 +53,48 @@ func (w *k8sWatcher) processEvent(e watch.Event) scheduler.WatchEvent {
 	var event scheduler.WatchEvent
 	var object scheduler.Object
 	event.Type = scheduler.EventType(e.Type)
+
+	if cf, ok := e.Object.(*v1.ConfigMap); ok {
+		object = cf
+	}
+
+	if ns, ok := e.Object.(*v1.Namespace); ok {
+		object = ns
+	}
+
+
+	if node, ok := e.Object.(*v1.Node); ok {
+		object = node
+	}
+
+	if pod, ok := e.Object.(*v1.Pod); ok {
+		object = pod
+	}
+
+	if rc, ok := e.Object.(*v1.ReplicationController); ok {
+		object = rc
+	}
+
+	if svc, ok := e.Object.(*v1.Service); ok {
+		object = svc
+	}
+
+	if dpl, ok := e.Object.(*appsv1.Deployment); ok {
+		object = dpl
+	}
+
+	if rs, ok := e.Object.(*appsv1.ReplicaSet); ok {
+		object = rs
+	}
+
+	if sts, ok := e.Object.(*appsv1.StatefulSet); ok {
+		object = sts
+	}
+
+	if ds, ok := e.Object.(*appsv1.DaemonSet); ok {
+		object = ds
+	}
+
 	event.Object = object
 	return event
 }
