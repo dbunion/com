@@ -66,8 +66,9 @@ type Cache interface {
 	TryLock(key string, val interface{}, timeout time.Duration) error
 	// unlock key
 	UnLock(key string, val interface{}) error
-	//
+	// set key
 	Set(key string, val interface{}) (bool, error)
+	// expire key
 	Expire(key string, timeout time.Duration) error
 }
 
