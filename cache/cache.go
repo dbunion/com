@@ -55,6 +55,15 @@ type Cache interface {
 	// decrease cached int value by key and return value.
 	DecrBy(key string) (interface{}, error)
 
+	// lock key with timeout
+	TryLock(key string, val interface{}, timeout time.Duration) error
+	// unlock key
+	UnLock(key string, val interface{}) error
+	// set key
+	Set(key string, val interface{}) (bool, error)
+	// expire key with timeout
+	Expire(key string, timeout time.Duration) error
+
 	// check if cached value exists or not.
 	IsExist(key string) bool
 	// clear all cache.

@@ -141,6 +141,69 @@ func (rc *Cache) ClearAll() error {
 	return err
 }
 
+// TryLock ...
+func (rc *Cache) TryLock(key string, val interface{}, timeout time.Duration) error {
+	luaLock := `
+if redis.call('setNx',KEYS[1],ARGV[1])  then
+   if redis.call('get',KEYS[1])==ARGV[1] then
+      return redis.call('expire',KEYS[1],ARGV[2])
+   else
+      return 0
+   end
+end`
+	lua := redis.NewScript(1, luaLock)
+	conn := rc.p.Get()
+	_, err := lua.Do(conn, fmt.Sprintf("%v", key), fmt.Sprintf("%v", val), int64(timeout/time.Second))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// UnLock ...
+func (rc *Cache) UnLock(key string, val interface{}) error {
+	luaLock := `
+if redis.call('get', KEYS[1]) == ARGV[1]
+then
+return redis.call('del', KEYS[1])
+else
+return false
+end
+`
+	lua := redis.NewScript(1, luaLock)
+	conn := rc.p.Get()
+	_, err := lua.Do(conn, key, val)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Set put cache to redis.
+func (rc *Cache) Set(key string, val interface{}) (bool, error) {
+	v, err := redis.Bool(rc.do("SETNX", key, val))
+	if err != nil {
+		return false, err
+	}
+
+	return v, nil
+}
+
+// Expire key.
+func (rc *Cache) Expire(key string, timeout time.Duration) error {
+	ttl := int(timeout / time.Second)
+	if ttl < 0 {
+		return nil
+	}
+
+	_, err := rc.do("expire", key, ttl)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // StartAndGC start redis cache adapter.
 // config is like {"key":"collection key","conn":"connection info","dbNum":"0"}
 // the cache item in redis are stored forever,
