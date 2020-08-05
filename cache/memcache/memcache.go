@@ -140,6 +140,27 @@ func (rc *Cache) IsExist(key string) bool {
 	return !(err != nil)
 }
 
+// TryLock ...
+func (rc *Cache) TryLock(key string, val interface{}, timeout time.Duration) error {
+	return nil
+}
+
+// UnLock ...
+func (rc *Cache) UnLock(key string, val interface{}) error {
+	return nil
+}
+
+// Set put cache to redis.
+func (rc *Cache) Set(key string, val interface{}) (bool, error) {
+
+	return false, nil
+}
+
+// Expire key.
+func (rc *Cache) Expire(key string, timeout time.Duration) error {
+	return nil
+}
+
 // ClearAll clear all cached in memcache.
 func (rc *Cache) ClearAll() error {
 	if rc.conn == nil {

@@ -61,6 +61,14 @@ type Cache interface {
 	ClearAll() error
 	// start gc routine based on config settings.
 	StartAndGC(config Config) error
+
+	// lock key
+	TryLock(key string, val interface{}, timeout time.Duration) error
+	// unlock key
+	UnLock(key string, val interface{}) error
+	//
+	Set(key string, val interface{}) (bool, error)
+	Expire(key string, timeout time.Duration) error
 }
 
 // Instance is a function create a new Cache Instance

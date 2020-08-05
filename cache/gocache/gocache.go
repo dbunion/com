@@ -105,6 +105,27 @@ func (rc *Cache) ClearAll() error {
 	return nil
 }
 
+// TryLock ...
+func (rc *Cache) TryLock(key string, val interface{}, timeout time.Duration) error {
+	return nil
+}
+
+// UnLock ...
+func (rc *Cache) UnLock(key string, val interface{}) error {
+	return nil
+}
+
+// Set put cache to redis.
+func (rc *Cache) Set(key string, val interface{}) (bool, error) {
+
+	return false, nil
+}
+
+// Expire key.
+func (rc *Cache) Expire(key string, timeout time.Duration) error {
+	return nil
+}
+
 // StartAndGC start go-cache adapter.
 // the cache item in go-cache are only in memory,
 // so no gc operation.
