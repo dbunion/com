@@ -62,13 +62,13 @@ type Cache interface {
 	// start gc routine based on config settings.
 	StartAndGC(config Config) error
 
-	// lock key
+	// lock key with timeout
 	TryLock(key string, val interface{}, timeout time.Duration) error
 	// unlock key
 	UnLock(key string, val interface{}) error
 	// set key
 	Set(key string, val interface{}) (bool, error)
-	// expire key
+	// expire key with timeout
 	Expire(key string, timeout time.Duration) error
 }
 
