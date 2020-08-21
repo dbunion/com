@@ -8,29 +8,34 @@ import (
 
 func TestLogrusInfo(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeLogrus, log.Config{
-		Level:         log.LevelInfo,
-		FilePath:      "/tmp/logrus.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  false,
-		JSONFormatter: false,
+		Level:          log.LevelInfo,
+		FilePath:       "/tmp/logrus.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationCount:  3,
+		RotationTime:   time.Minute,
+		RotationMaxAge: time.Minute*4,
 	})
 
 	if err != nil {
 		t.Fatalf("create new logger error, err:%v", err)
 	}
 
-	logger.Infof("logrus test, date:%v", time.Now().Unix())
+	for i := 0; i < 200; i++ {
+		logger.Infof("logrus test, date:%v", time.Now().Unix())
+		time.Sleep(time.Second)
+	}
 }
 
 func TestLogrusDebug(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeLogrus, log.Config{
-		Level:         log.LevelDebug,
-		FilePath:      "/tmp/logrus.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  false,
-		JSONFormatter: false,
+		Level:          log.LevelDebug,
+		FilePath:       "/tmp/logrus.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationCount:  3,
+		RotationTime:   time.Minute,
+		RotationMaxAge: time.Minute*4,
 	})
 
 	if err != nil {
@@ -42,12 +47,13 @@ func TestLogrusDebug(t *testing.T) {
 
 func TestLogrusWarning(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeLogrus, log.Config{
-		Level:         log.LevelWarning,
-		FilePath:      "/tmp/logrus.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  false,
-		JSONFormatter: false,
+		Level:          log.LevelWarning,
+		FilePath:       "/tmp/logrus.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {
@@ -59,12 +65,13 @@ func TestLogrusWarning(t *testing.T) {
 
 func TestLogrusError(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeLogrus, log.Config{
-		Level:         log.LevelError,
-		FilePath:      "/tmp/logrus.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  false,
-		JSONFormatter: false,
+		Level:          log.LevelError,
+		FilePath:       "/tmp/logrus.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {

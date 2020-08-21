@@ -33,7 +33,7 @@ type Backend struct {
 func New(cnf *config.Config) (iface.Backend, error) {
 	backend := &Backend{
 		Backend: common.NewBackend(cnf),
-		once:    sync.Once{},
+		once: sync.Once{},
 	}
 
 	return backend, nil
@@ -345,7 +345,7 @@ func (b *Backend) createMongoIndexes(database string) error {
 			Keys:    bson.M{"state": 1},
 			Options: options.Index().SetBackground(true).SetExpireAfterSeconds(expireIn),
 		},
-		{
+		mongo.IndexModel{
 			Keys:    bson.M{"lock": 1},
 			Options: options.Index().SetBackground(true).SetExpireAfterSeconds(expireIn),
 		},

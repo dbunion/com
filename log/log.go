@@ -2,6 +2,7 @@ package log
 
 import (
 	"fmt"
+	"time"
 )
 
 // Level - log level
@@ -32,15 +33,42 @@ type Config struct {
 	Level         Level  `json:"level"`
 	FilePath      string `json:"file_path"`
 	HighLighting  bool   `json:"highlighting"`
-	RotateByDay   bool   `json:"rotate_by_day"`
-	RotateByHour  bool   `json:"rotate_by_hour"`
 	JSONFormatter bool   `json:"json_formatter"`
 	CallerSkip    int    `json:"caller_skip"`
+
+	// Rotation config
+	RotationTime   time.Duration `json:"rotation_time"`
+	RotationMaxAge time.Duration `json:"rotate_max_age"`
+	RotationCount  uint          `json:"rotation_count"`
 
 	// Extend fields
 	// Extended fields can be used if there is a special implementation
 	Extend1 string `json:"extend_1"`
 	Extend2 string `json:"extend_2"`
+}
+
+// CheckWithDefault - check default value, if not set use default
+func (c *Config) CheckWithDefault() {
+	// config check
+	if c.RotationTime == 0 {
+		c.RotationTime = time.Hour*24
+	}
+
+	if c.RotationMaxAge > 0 && c.RotationCount == 0 {
+		return
+	}
+
+	if c.RotationCount > 0 && c.RotationMaxAge == 0 {
+		return
+	}
+
+	if c.RotationCount == 0 && c.RotationMaxAge == 0 {
+		c.RotationCount = 7
+		c.RotationMaxAge = 0
+		return
+	}
+
+	c.RotationCount = 0
 }
 
 // Logger interface contains all behaviors for log adapter.

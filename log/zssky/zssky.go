@@ -2,6 +2,7 @@ package zssky
 
 import (
 	"github.com/dbunion/com/log"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	zslog "github.com/zssky/log"
 )
 
@@ -117,25 +118,34 @@ func (l *Log) Close() error {
 
 // StartAndGC start log adapter.
 func (l *Log) StartAndGC(config log.Config) error {
+	config.CheckWithDefault()
+
 	l.config = config
 
 	zslog.SetLevelByString(string(config.Level))
 
 	// basic setting
 	zslog.SetHighlighting(config.HighLighting)
-	if config.RotateByDay {
-		zslog.SetRotateByDay()
+
+	// rotate opts
+	opts := []rotatelogs.Option{
+		rotatelogs.WithRotationTime(config.RotationTime),
 	}
 
-	if config.RotateByHour {
-		zslog.SetRotateByHour()
+	if config.RotationMaxAge > 0 {
+		opts = append(opts, rotatelogs.WithMaxAge(config.RotationMaxAge))
 	}
 
-	if config.FilePath != "" {
-		if err := zslog.SetOutputByName(config.FilePath); err != nil {
-			return err
-		}
+	if config.RotationCount > 0 {
+		opts = append(opts, rotatelogs.WithRotationCount(config.RotationCount))
 	}
+
+	writer, err := rotatelogs.New(l.config.FilePath+".%Y%m%d%H%M", opts...)
+	if err != nil {
+		return err
+	}
+
+	zslog.SetOutput(writer)
 
 	callerSkip := 5
 	if config.CallerSkip != 0 {

@@ -4,17 +4,17 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/dbunion/com/log"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
-	"os"
+	"io"
 	"runtime"
-	"time"
 )
 
 // Log is log adapter.
 type Log struct {
 	config    log.Config
 	logger    *logrus.Logger
-	outWriter *os.File
+	outWriter io.Writer
 }
 
 // NewLogrus create new logrus log with default collection name.
@@ -119,29 +119,41 @@ func (l *Log) Panicln(v ...interface{}) {
 
 // Close connection
 func (l *Log) Close() error {
-	if err := l.outWriter.Sync(); err != nil {
-		return err
-	}
-
-	return l.outWriter.Close()
+	return nil
 }
 
 // StartAndGC start log adapter.
 func (l *Log) StartAndGC(config log.Config) error {
+	config.CheckWithDefault()
+
 	l.config = config
 	l.logger = logrus.New()
 
 	l.logger.SetReportCaller(true)
 	l.logger.SetLevel(l.getLogLevel())
-	file, err := os.OpenFile(l.config.FilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, os.ModePerm)
+
+	opts := []rotatelogs.Option{
+		rotatelogs.WithRotationTime(config.RotationTime),
+	}
+
+	if config.RotationMaxAge > 0 {
+		opts = append(opts, rotatelogs.WithMaxAge(config.RotationMaxAge))
+	}
+
+	if config.RotationCount > 0 {
+		opts = append(opts, rotatelogs.WithRotationCount(config.RotationCount))
+	}
+
+	writer, err := rotatelogs.New(l.config.FilePath+".%Y%m%d%H%M", opts...)
 	if err != nil {
 		return err
 	}
 
-	l.outWriter = file
-	l.logger.SetOutput(file)
+	l.outWriter = writer
+	l.logger.SetOutput(writer)
 	l.logger.SetFormatter(&logrus.TextFormatter{
-		TimestampFormat:           time.RFC3339,
+		FullTimestamp:             true,
+		TimestampFormat:           "2006-01-02 15:04:05",
 		ForceColors:               config.HighLighting,
 		EnvironmentOverrideColors: config.HighLighting,
 		CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
@@ -160,7 +172,7 @@ func (l *Log) StartAndGC(config log.Config) error {
 	})
 	if config.JSONFormatter {
 		l.logger.SetFormatter(&logrus.JSONFormatter{
-			TimestampFormat:  time.RFC3339,
+			TimestampFormat:  "2006-01-02 15:04:05",
 			DisableTimestamp: false,
 			CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
 				pc, file, line, _ := runtime.Caller(9)

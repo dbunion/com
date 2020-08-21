@@ -11,16 +11,19 @@ func TestZsskyInfoLog(t *testing.T) {
 		Level:         log.LevelInfo,
 		FilePath:      "/tmp/zssky.log",
 		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
 		JSONFormatter: false,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 100,
 	})
 
 	if err != nil {
 		t.Fatalf("create new logger error, err:%v", err)
 	}
 
-	logger.Infof("log test, date:%v", time.Now().Unix())
+	for i := 0; i < 100; i++ {
+		logger.Infof("log test, date:%v", time.Now().Unix())
+		time.Sleep(time.Second)
+	}
 }
 
 func TestZsskyDebugLog(t *testing.T) {
@@ -28,9 +31,10 @@ func TestZsskyDebugLog(t *testing.T) {
 		Level:         log.LevelDebug,
 		FilePath:      "/tmp/zssky.log",
 		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
 		JSONFormatter: false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {
@@ -45,9 +49,10 @@ func TestZsskyWarningLog(t *testing.T) {
 		Level:         log.LevelWarning,
 		FilePath:      "/tmp/zssky.log",
 		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
 		JSONFormatter: false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {
@@ -62,9 +67,10 @@ func TestZsskyErrorLog(t *testing.T) {
 		Level:         log.LevelError,
 		FilePath:      "/tmp/zssky.log",
 		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
 		JSONFormatter: false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {
