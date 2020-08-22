@@ -62,7 +62,6 @@ func (w *k8sWatcher) processEvent(e watch.Event) scheduler.WatchEvent {
 		object = convertToNamespace(ns)
 	}
 
-
 	if node, ok := e.Object.(*v1.Node); ok {
 		object = convertToNode(node)
 	}

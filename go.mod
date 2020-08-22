@@ -17,6 +17,8 @@ require (
 	github.com/jinzhu/gorm v1.9.12 // indirect
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	github.com/kisielk/errcheck v1.4.0 // indirect
+	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.3 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.6.0 // indirect
 	github.com/sirupsen/logrus v1.4.2

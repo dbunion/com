@@ -8,29 +8,33 @@ import (
 
 func TestZsskyInfoLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelInfo,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
-		JSONFormatter: false,
+		Level:          log.LevelInfo,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationTime:   time.Minute,
+		RotationMaxAge: time.Minute * 3,
 	})
 
 	if err != nil {
 		t.Fatalf("create new logger error, err:%v", err)
 	}
 
-	logger.Infof("log test, date:%v", time.Now().Unix())
+	for i := 0; i < 10; i++ {
+		logger.Infof("log test, date:%v", time.Now().Unix())
+		time.Sleep(time.Second)
+	}
 }
 
 func TestZsskyDebugLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelDebug,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
-		JSONFormatter: false,
+		Level:          log.LevelDebug,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {
@@ -42,12 +46,13 @@ func TestZsskyDebugLog(t *testing.T) {
 
 func TestZsskyWarningLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelWarning,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
-		JSONFormatter: false,
+		Level:          log.LevelWarning,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {
@@ -59,12 +64,13 @@ func TestZsskyWarningLog(t *testing.T) {
 
 func TestZsskyErrorLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelError,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
-		JSONFormatter: false,
+		Level:          log.LevelError,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationCount:  3,
+		RotationTime:   time.Second,
+		RotationMaxAge: time.Second * 4,
 	})
 
 	if err != nil {

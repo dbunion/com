@@ -15,8 +15,6 @@ func TestTask(t *testing.T) {
 		Level:         log.LevelInfo,
 		FilePath:      "/tmp/task.log",
 		HighLighting:  true,
-		RotateByDay:   false,
-		RotateByHour:  true,
 		JSONFormatter: false,
 		CallerSkip:    5,
 	})
