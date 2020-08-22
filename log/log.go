@@ -51,7 +51,7 @@ type Config struct {
 func (c *Config) CheckWithDefault() {
 	// config check
 	if c.RotationTime == 0 {
-		c.RotationTime = time.Hour*24
+		c.RotationTime = time.Hour * 24
 	}
 
 	if c.RotationMaxAge > 0 && c.RotationCount == 0 {

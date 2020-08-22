@@ -8,19 +8,19 @@ import (
 
 func TestZsskyInfoLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelInfo,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		JSONFormatter: false,
-		RotationTime:   time.Second,
-		RotationMaxAge: time.Second * 100,
+		Level:          log.LevelInfo,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
+		RotationTime:   time.Minute,
+		RotationMaxAge: time.Minute * 3,
 	})
 
 	if err != nil {
 		t.Fatalf("create new logger error, err:%v", err)
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		logger.Infof("log test, date:%v", time.Now().Unix())
 		time.Sleep(time.Second)
 	}
@@ -28,10 +28,10 @@ func TestZsskyInfoLog(t *testing.T) {
 
 func TestZsskyDebugLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelDebug,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		JSONFormatter: false,
+		Level:          log.LevelDebug,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
 		RotationCount:  3,
 		RotationTime:   time.Second,
 		RotationMaxAge: time.Second * 4,
@@ -46,10 +46,10 @@ func TestZsskyDebugLog(t *testing.T) {
 
 func TestZsskyWarningLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelWarning,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		JSONFormatter: false,
+		Level:          log.LevelWarning,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
 		RotationCount:  3,
 		RotationTime:   time.Second,
 		RotationMaxAge: time.Second * 4,
@@ -64,10 +64,10 @@ func TestZsskyWarningLog(t *testing.T) {
 
 func TestZsskyErrorLog(t *testing.T) {
 	logger, err := log.NewLogger(log.TypeZsskyLog, log.Config{
-		Level:         log.LevelError,
-		FilePath:      "/tmp/zssky.log",
-		HighLighting:  true,
-		JSONFormatter: false,
+		Level:          log.LevelError,
+		FilePath:       "/tmp/zssky.log",
+		HighLighting:   true,
+		JSONFormatter:  false,
 		RotationCount:  3,
 		RotationTime:   time.Second,
 		RotationMaxAge: time.Second * 4,

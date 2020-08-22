@@ -129,6 +129,7 @@ func (l *Log) StartAndGC(config log.Config) error {
 
 	// rotate opts
 	opts := []rotatelogs.Option{
+		rotatelogs.WithLinkName(config.FilePath),
 		rotatelogs.WithRotationTime(config.RotationTime),
 	}
 

@@ -11,17 +11,18 @@ func TestLogrusInfo(t *testing.T) {
 		Level:          log.LevelInfo,
 		FilePath:       "/tmp/logrus.log",
 		HighLighting:   true,
-		JSONFormatter:  false,
+		JSONFormatter:  true,
 		RotationCount:  3,
 		RotationTime:   time.Minute,
-		RotationMaxAge: time.Minute*4,
+		RotationMaxAge: time.Minute * 4,
+		CallerSkip:     10,
 	})
 
 	if err != nil {
 		t.Fatalf("create new logger error, err:%v", err)
 	}
 
-	for i := 0; i < 200; i++ {
+	for i := 0; i < 10; i++ {
 		logger.Infof("logrus test, date:%v", time.Now().Unix())
 		time.Sleep(time.Second)
 	}
@@ -35,7 +36,7 @@ func TestLogrusDebug(t *testing.T) {
 		JSONFormatter:  false,
 		RotationCount:  3,
 		RotationTime:   time.Minute,
-		RotationMaxAge: time.Minute*4,
+		RotationMaxAge: time.Minute * 4,
 	})
 
 	if err != nil {

@@ -133,6 +133,7 @@ func (l *Log) StartAndGC(config log.Config) error {
 	l.logger.SetLevel(l.getLogLevel())
 
 	opts := []rotatelogs.Option{
+		rotatelogs.WithLinkName(config.FilePath),
 		rotatelogs.WithRotationTime(config.RotationTime),
 	}
 
@@ -153,11 +154,11 @@ func (l *Log) StartAndGC(config log.Config) error {
 	l.logger.SetOutput(writer)
 	l.logger.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp:             true,
-		TimestampFormat:           "2006-01-02 15:04:05",
+		TimestampFormat:           "2006-01-02 15:04:05.99",
 		ForceColors:               config.HighLighting,
 		EnvironmentOverrideColors: config.HighLighting,
 		CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
-			pc, file, line, _ := runtime.Caller(9)
+			pc, file, line, _ := runtime.Caller(config.CallerSkip)
 			name := runtime.FuncForPC(pc).Name()
 			if i := bytes.LastIndexAny([]byte(name), "."); i != -1 {
 				name = name[i+1:]
@@ -172,7 +173,7 @@ func (l *Log) StartAndGC(config log.Config) error {
 	})
 	if config.JSONFormatter {
 		l.logger.SetFormatter(&logrus.JSONFormatter{
-			TimestampFormat:  "2006-01-02 15:04:05",
+			TimestampFormat:  "2006-01-02 15:04:05.99",
 			DisableTimestamp: false,
 			CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
 				pc, file, line, _ := runtime.Caller(9)
