@@ -153,6 +153,11 @@ if redis.call('setNx',KEYS[1],ARGV[1])  then
 end`
 	lua := redis.NewScript(1, luaLock)
 	conn := rc.p.Get()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 	_, err := lua.Do(conn, fmt.Sprintf("%v", key), fmt.Sprintf("%v", val), int64(timeout/time.Second))
 	if err != nil {
 		return err
@@ -172,6 +177,11 @@ end
 `
 	lua := redis.NewScript(1, luaLock)
 	conn := rc.p.Get()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 	_, err := lua.Do(conn, key, val)
 	if err != nil {
 		return err
