@@ -28,9 +28,10 @@ require (
 	github.com/zssky/log v1.0.4
 	github.com/zssky/tc v0.0.0-20200328060218-603c6a2939da
 	gitlab.com/opennota/check v0.0.0-20181224073239-ccaba434e62a // indirect
+	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
 	google.golang.org/grpc v1.29.1
-	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
+	honnef.co/go/tools v0.1.0 // indirect
 	k8s.io/api v0.18.2
 	k8s.io/apimachinery v0.18.2
 	k8s.io/client-go v0.18.2

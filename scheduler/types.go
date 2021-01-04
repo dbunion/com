@@ -4,6 +4,13 @@ import (
 	"context"
 )
 
+const (
+	// QuantityG - quantity unit G
+	QuantityG = 1000000000
+	// QuantityM - quantity unit M
+	QuantityM = 100000000
+)
+
 // Object - interface for base resource
 type Object interface {
 	GetName() string
@@ -197,6 +204,24 @@ func (p *Pod) GetName() string {
 type Volume struct {
 	Name  string                 `json:"name" protobuf:"bytes,1,opt,name=name"`
 	Value map[string]interface{} `json:",inline" protobuf:"bytes,2,opt,name=value"`
+}
+
+// FlexVolumeSource represents a generic volume resource that is
+type FlexVolumeSource struct {
+	// Driver is the name of the driver to use for this volume.
+	Driver string `json:"driver" protobuf:"bytes,1,opt,name=driver"`
+	// Filesystem type to mount.
+	// Must be a filesystem type supported by the host operating system.
+	// Ex. "ext4", "xfs", "ntfs". The default filesystem depends on FlexVolume script.
+	// +optional
+	FSType string `json:"fsType,omitempty" protobuf:"bytes,2,opt,name=fsType"`
+	// Optional: Defaults to false (read/write). ReadOnly here will force
+	// the ReadOnly setting in VolumeMounts.
+	// +optional
+	ReadOnly bool `json:"readOnly,omitempty" protobuf:"varint,4,opt,name=readOnly"`
+	// Optional: Extra command options if any.
+	// +optional
+	Options map[string]string `json:"options,omitempty" protobuf:"bytes,5,rep,name=options"`
 }
 
 // ContainerPort represents a network port in a single container.
