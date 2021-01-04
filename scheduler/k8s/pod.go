@@ -2,10 +2,12 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"github.com/dbunion/com/scheduler"
 	"github.com/juju/errors"
 	"io/ioutil"
 	"k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 	"sigs.k8s.io/yaml"
@@ -24,6 +26,15 @@ func newPodClient(apiClient *Client) *PodClient {
 	}
 }
 
+func convertToFlexVolumeSource(v *v1.FlexVolumeSource) *scheduler.FlexVolumeSource {
+	return &scheduler.FlexVolumeSource{
+		Driver:   v.Driver,
+		FSType:   v.FSType,
+		ReadOnly: false,
+		Options:  v.Options,
+	}
+}
+
 func convertToVolume(v *v1.Volume) *scheduler.Volume {
 	if v == nil {
 		return nil
@@ -35,7 +46,7 @@ func convertToVolume(v *v1.Volume) *scheduler.Volume {
 
 	if v.FlexVolume != nil {
 		ret.Value["Type"] = "FlexVolume"
-		ret.Value["FlexVolume"] = v.FlexVolume
+		ret.Value["FlexVolume"] = convertToFlexVolumeSource(v.FlexVolume)
 	} else if v.HostPath != nil {
 		ret.Value["Type"] = "HostPath"
 		ret.Value["HostPath"] = v.HostPath
@@ -370,8 +381,33 @@ func convertContainerPortsToK8sContainerPorts(ports []scheduler.ContainerPort) [
 	return cts
 }
 
-func convertResourceRequirementsToK8sResourceRequirements(resource scheduler.ResourceRequirements) v1.ResourceRequirements {
-	return v1.ResourceRequirements{}
+func convertResourceRequirementsToK8sResourceRequirements(r scheduler.ResourceRequirements) v1.ResourceRequirements {
+	// requests
+	requests := make(v1.ResourceList)
+	for key, value := range r.Requests {
+		if value >= scheduler.QuantityG {
+			q, _ := resource.ParseQuantity(fmt.Sprintf("%vG", value/scheduler.QuantityG))
+			requests[v1.ResourceName(key)] = q
+		} else {
+			requests[v1.ResourceName(key)] = *resource.NewQuantity(value, resource.DecimalExponent)
+		}
+	}
+
+	// limits
+	limits := make(v1.ResourceList)
+	for key, value := range r.Limits {
+		if value >= scheduler.QuantityG {
+			q, _ := resource.ParseQuantity(fmt.Sprintf("%vG", value/scheduler.QuantityG))
+			limits[v1.ResourceName(key)] = q
+		} else {
+			limits[v1.ResourceName(key)] = *resource.NewQuantity(value, resource.DecimalExponent)
+		}
+	}
+
+	return v1.ResourceRequirements{
+		Requests: requests,
+		Limits:   limits,
+	}
 }
 
 func convertVolumeMountToK8sVolumeMount(vol scheduler.VolumeMount) v1.VolumeMount {
@@ -411,6 +447,77 @@ func convertContainersToK8sContainers(containers []scheduler.Container) []v1.Con
 		cts[i] = convertContainerToK8sContainer(containers[i])
 	}
 	return cts
+}
+
+func updatePodSpec(src v1.PodSpec, change scheduler.PodSpec) v1.PodSpec {
+	// update Resource
+	for i := 0; i < len(src.Containers); i++ {
+		if src.Containers[i].Name != change.Containers[i].Name {
+			continue
+		}
+
+		srcResource := src.Containers[i].Resources
+		changResource := change.Containers[i].Resources
+
+		// update Limits
+		for key, value := range srcResource.Limits {
+			if v, found := changResource.Limits[key.String()]; found {
+				srcInt64Value, ok := value.AsInt64()
+				if !ok {
+					continue
+				}
+
+				if v != srcInt64Value {
+					if v >= scheduler.QuantityG {
+						q, _ := resource.ParseQuantity(fmt.Sprintf("%vG", v/scheduler.QuantityG))
+						srcResource.Limits[key] = q
+					} else {
+						srcResource.Limits[key] = *resource.NewQuantity(v, resource.DecimalExponent)
+					}
+				}
+			}
+		}
+
+		// update Requests
+		for key, value := range srcResource.Requests {
+			if v, found := changResource.Requests[key.String()]; found {
+				srcInt64Value, ok := value.AsInt64()
+				if !ok {
+					continue
+				}
+				if v != srcInt64Value {
+					if v >= scheduler.QuantityG {
+						q, _ := resource.ParseQuantity(fmt.Sprintf("%vG", v/scheduler.QuantityG))
+						srcResource.Requests[key] = q
+					} else {
+						srcResource.Requests[key] = *resource.NewQuantity(v, resource.DecimalExponent)
+					}
+				}
+			}
+		}
+
+		// update volume
+		srcVolumes := src.Volumes
+		changeVolumes := change.Volumes
+		for i := 0; i < len(srcVolumes); i++ {
+			if srcVolumes[i].Name != changeVolumes[i].Name {
+				continue
+			}
+
+			// check FlexVolume
+			if srcVolumes[i].FlexVolume != nil {
+				if v, found := changeVolumes[i].Value["FlexVolume"]; found {
+					flexVolumeSource, ok := v.(*scheduler.FlexVolumeSource)
+					if ok && srcVolumes[i].FlexVolume.Options["size"] != flexVolumeSource.Options["size"] {
+						src.Volumes[i].FlexVolume.Options["size"] = flexVolumeSource.Options["size"]
+					}
+				}
+			}
+		}
+
+	}
+
+	return src
 }
 
 func convertPodSpecToK8sPodSpec(spec scheduler.PodSpec) *v1.PodSpec {
@@ -499,8 +606,11 @@ func (c *PodClient) Update(ctx context.Context, param *scheduler.Pod) error {
 		return err
 	}
 
-	// update fields
+	// update Labels
 	req.Labels = param.Labels
+
+	// update PodSpec
+	req.Spec = updatePodSpec(req.Spec, param.Spec)
 
 	_, err = c.apiClient.clientSet.CoreV1().Pods(param.Namespace).Update(ctx, req, meta_v1.UpdateOptions{})
 	if err != nil {

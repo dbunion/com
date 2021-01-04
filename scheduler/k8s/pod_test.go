@@ -81,6 +81,37 @@ func TestUpdatePod(t *testing.T) {
 	}
 }
 
+func TestUpdatePodResource(t *testing.T) {
+	if env == defaultEnv {
+		return
+	}
+
+	client, err := newClient(&opt)
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+	pod, err := client.GetPodOperator().Get(context.Background(), defaultEnv, &scheduler.Pod{Name: "grafana-b4f886f5b-qcgvc"})
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+
+	pod.Labels["Update"] = time.Now().Format("20060102150405")
+	pod.Spec.Containers[0].Resources.Limits["cpu"] = 5
+	pod.Spec.Containers[0].Resources.Limits["memory"] = 5 * scheduler.QuantityG
+	pod.Spec.Containers[0].Resources.Requests["memory"] = 5 * scheduler.QuantityG
+
+	flexVolum, ok := pod.Spec.Volumes[1].Value["FlexVolume"].(*scheduler.FlexVolumeSource)
+	if ok {
+		flexVolum.Options["size"] = "101Gi"
+		pod.Spec.Volumes[1].Value["FlexVolume"] = flexVolum
+	}
+
+	if err := client.GetPodOperator().Update(context.Background(), pod); err != nil {
+		t.Fatalf("update pod err:%v", err)
+	}
+}
+
 func TestDeletePod(t *testing.T) {
 	if env == defaultEnv {
 		return
