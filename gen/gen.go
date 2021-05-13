@@ -11,11 +11,25 @@ const (
 	TypeService = "service"
 )
 
+// Primary - primary key info
+type Primary struct {
+	Type    string
+	Name    string
+	Default interface{}
+}
+
+// IsEmpty - check primary is empty
+func (p *Primary) IsEmpty() bool {
+	return p.Type == "" && p.Name == "" && p.Default == nil
+}
+
 // Item - gen item
 type Item struct {
-	Name      string   `json:"name"`
-	Relations []string `json:"relations"`
-	Detail    string   `json:"detail"`
+	Name        string   `json:"name"`
+	Relations   []string `json:"relations"`
+	Detail      string   `json:"detail"`
+	Primary     Primary  `json:"primary"`
+	DisableMode bool     `json:"disable_mode"`
 }
 
 // ModelGenConfig - model config
