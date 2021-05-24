@@ -26,6 +26,7 @@ func (p *Primary) IsEmpty() bool {
 // Item - gen item
 type Item struct {
 	Name        string   `json:"name"`
+	TableName   string   `json:"table_name"`
 	Relations   []string `json:"relations"`
 	Detail      string   `json:"detail"`
 	Primary     Primary  `json:"primary"`
