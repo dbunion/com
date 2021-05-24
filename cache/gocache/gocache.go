@@ -107,17 +107,27 @@ func (rc *Cache) ClearAll() error {
 
 // TryLock ...
 func (rc *Cache) TryLock(key string, val interface{}, timeout time.Duration) error {
+	if rc.IsExist(key) {
+		return fmt.Errorf("lock failure")
+	}
+
+	rc.p.Set(key, val, timeout)
 	return nil
 }
 
 // UnLock ...
 func (rc *Cache) UnLock(key string, val interface{}) error {
-	return nil
+	if !rc.IsExist(key) {
+		return nil
+	}
+
+	return rc.Delete(key)
 }
 
 // Set put cache to redis.
 func (rc *Cache) Set(key string, val interface{}) (bool, error) {
-	return false, nil
+	rc.p.Set(key, val, goCache.NoExpiration)
+	return true, nil
 }
 
 // Expire key.
