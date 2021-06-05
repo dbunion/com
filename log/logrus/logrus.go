@@ -7,6 +7,7 @@ import (
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
 	"io"
+	"os"
 	"runtime"
 )
 
@@ -150,8 +151,13 @@ func (l *Log) StartAndGC(config log.Config) error {
 		return err
 	}
 
-	l.outWriter = writer
-	l.logger.SetOutput(writer)
+	if config.AlsoToStdOut {
+		l.outWriter = io.MultiWriter(os.Stdout, writer)
+		l.logger.SetOutput(l.outWriter)
+	} else {
+		l.outWriter = writer
+		l.logger.SetOutput(writer)
+	}
 	l.logger.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp:             true,
 		TimestampFormat:           "2006-01-02 15:04:05.99",

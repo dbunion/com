@@ -34,6 +34,7 @@ type Config struct {
 	FilePath      string `json:"file_path"`
 	HighLighting  bool   `json:"highlighting"`
 	JSONFormatter bool   `json:"json_formatter"`
+	AlsoToStdOut  bool   `json:"also_to_std_out"`
 	CallerSkip    int    `json:"caller_skip"`
 
 	// Rotation config

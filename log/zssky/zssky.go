@@ -4,6 +4,8 @@ import (
 	"github.com/dbunion/com/log"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	zslog "github.com/zssky/log"
+	"io"
+	"os"
 )
 
 // Log is log adapter.
@@ -146,7 +148,11 @@ func (l *Log) StartAndGC(config log.Config) error {
 		return err
 	}
 
-	zslog.SetOutput(writer)
+	if config.AlsoToStdOut {
+		zslog.SetOutput(io.MultiWriter(os.Stdout, writer))
+	} else {
+		zslog.SetOutput(writer)
+	}
 
 	callerSkip := 5
 	if config.CallerSkip != 0 {
