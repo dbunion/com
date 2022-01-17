@@ -25,12 +25,13 @@ func (p *Primary) IsEmpty() bool {
 
 // Item - gen item
 type Item struct {
-	Name        string   `json:"name"`
-	TableName   string   `json:"table_name"`
-	Relations   []string `json:"relations"`
-	Detail      string   `json:"detail"`
-	Primary     Primary  `json:"primary"`
-	DisableMode bool     `json:"disable_mode"`
+	Name        string                 `json:"name"`
+	TableName   string                 `json:"table_name"`
+	Relations   []string               `json:"relations"`
+	Detail      string                 `json:"detail"`
+	Primary     Primary                `json:"primary"`
+	DisableMode bool                   `json:"disable_mode"`
+	Extend      map[string]interface{} `json:"extend"`
 }
 
 // ModelGenConfig - model config
