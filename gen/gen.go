@@ -43,12 +43,13 @@ type ModelGenConfig struct {
 
 // SItem - service config item
 type SItem struct {
-	Req        interface{} `json:"req"`
-	Dst        interface{} `json:"dst"`
-	Index      int64       `json:"index"`
-	CheckApp   bool        `json:"check_app"`
-	ViewCfg    ViewConfig  `json:"view_cfg"`
-	DisableRPC bool        `json:"disable_rpc"`
+	Req        interface{}            `json:"req"`
+	Dst        interface{}            `json:"dst"`
+	Index      int64                  `json:"index"`
+	CheckApp   bool                   `json:"check_app"`
+	ViewCfg    ViewConfig             `json:"view_cfg"`
+	DisableRPC bool                   `json:"disable_rpc"`
+	Extend     map[string]interface{} `json:"extend"`
 }
 
 // ServiceGenConfig - service config
