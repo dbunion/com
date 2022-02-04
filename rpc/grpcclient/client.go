@@ -86,8 +86,6 @@ func (c *Conn) Dial(target string, opts ...grpc.DialOption) (*Conn, error) {
 		}
 	}
 
-	grpc.WithUnaryInterceptor()
-
 	// secure dial opt init
 	secOpt, err := secureDialOption(c.cfg)
 	if err == nil {
