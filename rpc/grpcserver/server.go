@@ -1,17 +1,18 @@
 package grpcserver
 
 import (
+	"context"
 	"fmt"
-	"github.com/dbunion/com/rpc"
-	"github.com/grpc-ecosystem/go-grpc-middleware"
-	"github.com/grpc-ecosystem/go-grpc-prometheus"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/keepalive"
 	"math"
 	"net"
 	"time"
+
+	"github.com/dbunion/com/rpc"
+	"github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/keepalive"
 )
 
 // DefaultConfig - rpc default config
@@ -43,7 +44,7 @@ type Server struct {
 // NewRPCServer create the gRPC server we will be using.
 // It has to be called after flags are parsed, but before
 // services register themselves.
-func NewRPCServer(cfg *rpc.Config) (*Server, error) {
+func NewRPCServer(cfg *rpc.Config, outOpts ...grpc.ServerOption) (*Server, error) {
 	// skip if not registered
 	if !cfg.IsGRPCEnabled() {
 		return nil, fmt.Errorf("skipping gRPC server creation")
@@ -96,6 +97,10 @@ func NewRPCServer(cfg *rpc.Config) (*Server, error) {
 
 	opts = append(opts, interceptors(cfg)...)
 
+	if len(outOpts) > 0 {
+		opts = append(opts, outOpts...)
+	}
+
 	return &Server{grpc.NewServer(opts...), cfg}, nil
 }
 
@@ -114,10 +119,6 @@ func interceptors(cfg *rpc.Config) []grpc.ServerOption {
 		}
 		authPlugin = authPluginImpl
 		interceptors.Add(authenticatingStreamInterceptor, authenticatingUnaryInterceptor)
-	}
-
-	if cfg.EnableGRPCPrometheus {
-		interceptors.Add(grpc_prometheus.StreamServerInterceptor, grpc_prometheus.UnaryServerInterceptor)
 	}
 
 	if interceptors.NonEmpty() {

@@ -47,8 +47,8 @@ type SItem struct {
 	Dst        interface{}            `json:"dst"`
 	Index      int64                  `json:"index"`
 	CheckApp   bool                   `json:"check_app"`
-	ViewCfg    ViewConfig             `json:"view_cfg"`
 	DisableRPC bool                   `json:"disable_rpc"`
+	ViewCfg    ViewConfig             `json:"view_cfg"`
 	Extend     map[string]interface{} `json:"extend"`
 }
 

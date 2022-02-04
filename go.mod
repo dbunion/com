@@ -6,6 +6,7 @@ require (
 	github.com/RichardKnop/machinery v1.7.7
 	github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/go-redis/redis/v7 v7.2.0
 	github.com/go-sql-driver/mysql v1.5.0
@@ -14,9 +15,10 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
-	github.com/jinzhu/gorm v1.9.12 // indirect
-	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
-	github.com/kisielk/errcheck v1.4.0 // indirect
+	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
+	github.com/juju/errors v0.0.0-20220203013757-bd733f3c86b9
+	github.com/juju/testing v0.0.0-20220203020004-a0ff61f03494 // indirect
+	github.com/kisielk/errcheck v1.6.0 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.3 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
@@ -24,14 +26,13 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.4.0
-	github.com/youtube/vitess v2.1.1+incompatible // indirect
+	github.com/tebeka/strftime v0.1.5 // indirect
 	github.com/zssky/log v1.0.4
 	github.com/zssky/tc v0.0.0-20200328060218-603c6a2939da
 	gitlab.com/opennota/check v0.0.0-20181224073239-ccaba434e62a // indirect
-	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
+	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	google.golang.org/grpc v1.29.1
-	honnef.co/go/tools v0.1.0 // indirect
+	honnef.co/go/tools v0.2.2 // indirect
 	k8s.io/api v0.18.2
 	k8s.io/apimachinery v0.18.2
 	k8s.io/client-go v0.18.2

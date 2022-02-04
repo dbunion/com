@@ -8,8 +8,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
-
-	grpcPrometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 )
 
 // grpcDialOptions is a registry of functions that append grpcDialOption to use when dialing a service
@@ -36,12 +34,12 @@ type Conn struct {
 }
 
 // NewConn - create new grpc client conn
-func NewConn(target string, cfg *rpc.Config) (*Conn, error) {
+func NewConn(target string, cfg *rpc.Config, opts ...grpc.DialOption) (*Conn, error) {
 	conn := &Conn{
 		cfg: *cfg,
 	}
 
-	return conn.Dial(target)
+	return conn.Dial(target, opts...)
 }
 
 // Close - release conn
@@ -52,7 +50,7 @@ func (c *Conn) Close() error {
 // Dial creates a grpc connection to the given target.
 // failFast is a non-optional parameter because callers are required to specify
 // what that should be.
-func (c *Conn) Dial(target string) (*Conn, error) {
+func (c *Conn) Dial(target string, opts ...grpc.DialOption) (*Conn, error) {
 	newOpts := []grpc.DialOption{
 		grpc.WithDefaultCallOptions(
 			grpc.MaxCallRecvMsgSize(int(c.cfg.MaxMessageSize)),
@@ -88,15 +86,14 @@ func (c *Conn) Dial(target string) (*Conn, error) {
 		}
 	}
 
-	if c.cfg.EnableGRPCPrometheus {
-		newOpts = append(newOpts, grpc.WithUnaryInterceptor(grpcPrometheus.UnaryClientInterceptor))
-		newOpts = append(newOpts, grpc.WithStreamInterceptor(grpcPrometheus.StreamClientInterceptor))
-	}
-
 	// secure dial opt init
 	secOpt, err := secureDialOption(c.cfg)
 	if err == nil {
 		newOpts = append(newOpts, secOpt)
+	}
+
+	if len(opts) > 0 {
+		newOpts = append(newOpts, opts...)
 	}
 
 	c.ClientConn, err = grpc.Dial(target, newOpts...)
