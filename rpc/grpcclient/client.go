@@ -34,12 +34,12 @@ type Conn struct {
 }
 
 // NewConn - create new grpc client conn
-func NewConn(target string, cfg *rpc.Config, opts ...grpc.DialOption) (*Conn, error) {
+func NewConn(target string, cfg *rpc.Config) (*Conn, error) {
 	conn := &Conn{
 		cfg: *cfg,
 	}
 
-	return conn.Dial(target, opts...)
+	return conn.Dial(target)
 }
 
 // Close - release conn
@@ -85,6 +85,8 @@ func (c *Conn) Dial(target string, opts ...grpc.DialOption) (*Conn, error) {
 			return nil, fmt.Errorf("there was an error initializing client grpc.DialOption: %v", err)
 		}
 	}
+
+	grpc.WithUnaryInterceptor()
 
 	// secure dial opt init
 	secOpt, err := secureDialOption(c.cfg)
