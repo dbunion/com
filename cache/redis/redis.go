@@ -196,7 +196,7 @@ end
 
 // Set put cache to redis.
 func (rc *Cache) Set(key string, val interface{}) (bool, error) {
-	v, err := redis.Bool(rc.do("SETNX", key, val))
+	v, err := redis.Bool(rc.do("SET", key, val))
 	if err != nil {
 		return false, err
 	}
