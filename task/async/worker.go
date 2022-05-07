@@ -85,6 +85,26 @@ func (w *Worker) StartAndGC(cfg task.Config) error {
 			return err
 		}
 		cnf.DynamoDB = &broker
+	} else if cfg.BrokerType == "kafka" {
+		var broker config.KafkaConfig
+		if err := json.Unmarshal([]byte(cfg.BrokerConfig), &broker); err != nil {
+			return err
+		}
+		cnf.Kafka = &broker
+	}
+
+	if cfg.BackendType == "redis" {
+		var backend config.RedisConfig
+		if err := json.Unmarshal([]byte(cfg.BackendConfig), &backend); err != nil {
+			return err
+		}
+		cnf.Redis = &backend
+	} else if cfg.BackendType == "mongodb" {
+		var backend config.MongoDBConfig
+		if err := json.Unmarshal([]byte(cfg.BackendConfig), &backend); err != nil {
+			return err
+		}
+		cnf.MongoDB = &backend
 	}
 
 	server, err := machinery.NewServer(&cnf)

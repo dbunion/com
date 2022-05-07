@@ -26,6 +26,7 @@ func (m *defaultFuncWrap) GetTasks() map[string]interface{} {
 	return map[string]interface{}{
 		"httpGet":    m.HTTPGet,
 		"sshCommand": m.ExecSSHCommand,
+		"add":        m.AddEval,
 	}
 }
 
