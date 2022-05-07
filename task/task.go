@@ -21,6 +21,8 @@ type Config struct {
 	Broker          string `json:"broker"`
 	DefaultQueue    string `json:"default_queue"`
 	BrokerConfig    string `json:"broker_config"`
+	BackendType     string `json:"backend_type"`
+	BackendConfig   string `json:"backend_config"`
 	ResultBackend   string `json:"result_backend"`
 	ResultsExpireIn int    `json:"results_expire_in"`
 

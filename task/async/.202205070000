@@ -1,0 +1,228 @@
+2022/05/07 16:00:24 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:00:24 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:00:24 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:00:24 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:00:24 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:00:24 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:00:24 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:00:24 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:00:24 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:00:24 kafka.go:229: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:03:06 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:03:06 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:03:06 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:03:06 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:03:06 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:03:06 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:03:06 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:03:06 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:03:06 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:03:06 kafka.go:229: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:03:09 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"cb2f086f-4288-48ff-b561-fe5b417d3068","Name":"httpGet","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"string","Value":"https://www.baidu.com"},{"Name":"","Type":"int64","Value":10000000000},{"Name":"","Type":"int64","Value":10000000000}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:03:09 async_test.go:41: [0;32minfo func2 task pre post, name:httpGet func:httpGet[0m
+2022/05/07 16:03:09 worker.go:269: [0;32minfo taskSucceeded Processed task cb2f086f-4288-48ff-b561-fe5b417d3068. Results = <[0m
+2022/05/07 16:03:09 async_test.go:44: [0;32minfo func3 task post, name:httpGet func:httpGet[0m
+2022/05/07 16:06:54 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:06:54 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:06:54 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:06:54 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:06:54 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:06:54 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:06:54 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:06:54 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:06:54 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:06:54 kafka.go:229: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:06:57 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"a6424814-8734-41d1-b8a9-9cd5be110ddc","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:06:57 async_test.go:41: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:06:57 worker.go:269: [0;32minfo taskSucceeded Processed task a6424814-8734-41d1-b8a9-9cd5be110ddc. Results = 2[0m
+2022/05/07 16:06:57 async_test.go:44: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:07:10 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"923f131a-545a-44f5-a107-b45999ce0f83","Name":"httpGet","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"string","Value":"https://www.baidu.com"},{"Name":"","Type":"int64","Value":10000000000},{"Name":"","Type":"int64","Value":10000000000}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:07:10 async_test.go:41: [0;32minfo func2 task pre post, name:httpGet func:httpGet[0m
+2022/05/07 16:07:10 worker.go:269: [0;32minfo taskSucceeded Processed task 923f131a-545a-44f5-a107-b45999ce0f83. Results = <[0m
+2022/05/07 16:07:10 async_test.go:44: [0;32minfo func3 task post, name:httpGet func:httpGet[0m
+2022/05/07 16:07:11 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"fb8b05c7-540f-4df7-8550-15b8f772a5fe","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:07:11 async_test.go:41: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:07:11 worker.go:269: [0;32minfo taskSucceeded Processed task fb8b05c7-540f-4df7-8550-15b8f772a5fe. Results = 2[0m
+2022/05/07 16:07:11 async_test.go:44: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:07:11 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"cac65f93-1be4-4e9b-9981-87f0fec44e01","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:07:11 async_test.go:41: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:07:11 worker.go:269: [0;32minfo taskSucceeded Processed task cac65f93-1be4-4e9b-9981-87f0fec44e01. Results = 2[0m
+2022/05/07 16:07:11 async_test.go:44: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:07:11 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"80fc038f-636c-4492-8bf1-d104d38b0f42","Name":"httpGet","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"string","Value":"https://www.baidu.com"},{"Name":"","Type":"int64","Value":10000000000},{"Name":"","Type":"int64","Value":10000000000}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:07:11 async_test.go:41: [0;32minfo func2 task pre post, name:httpGet func:httpGet[0m
+2022/05/07 16:07:11 worker.go:269: [0;32minfo taskSucceeded Processed task 80fc038f-636c-4492-8bf1-d104d38b0f42. Results = <[0m
+2022/05/07 16:07:11 async_test.go:44: [0;32minfo func3 task post, name:httpGet func:httpGet[0m
+2022/05/07 16:07:12 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"c253cde8-f726-46b7-9978-53d355e121eb","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:07:12 async_test.go:41: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:07:12 worker.go:269: [0;32minfo taskSucceeded Processed task c253cde8-f726-46b7-9978-53d355e121eb. Results = 2[0m
+2022/05/07 16:07:12 async_test.go:44: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:07:12 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"cb9af0b2-f737-4fcd-8f22-c997d070b1b3","Name":"httpGet","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"string","Value":"https://www.baidu.com"},{"Name":"","Type":"int64","Value":10000000000},{"Name":"","Type":"int64","Value":10000000000}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:07:12 async_test.go:41: [0;32minfo func2 task pre post, name:httpGet func:httpGet[0m
+2022/05/07 16:07:12 worker.go:269: [0;32minfo taskSucceeded Processed task cb9af0b2-f737-4fcd-8f22-c997d070b1b3. Results = <[0m
+2022/05/07 16:07:12 async_test.go:44: [0;32minfo func3 task post, name:httpGet func:httpGet[0m
+2022/05/07 16:11:16 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:11:16 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:11:16 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:11:16 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:11:16 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:11:16 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:11:16 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:11:16 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:11:16 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:11:16 kafka.go:229: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:15:47 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:15:47 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:15:47 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:15:47 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:15:47 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:15:47 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:15:47 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:15:47 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:15:47 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:15:47 kafka.go:229: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:15:50 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"ebf14fa7-9ee7-4c37-85b8-f196831251ce","Name":"httpGet","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"string","Value":"https://www.baidu.com"},{"Name":"","Type":"int64","Value":10000000000},{"Name":"","Type":"int64","Value":10000000000}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:15:50 async_test.go:41: [0;32minfo func2 task pre post, name:httpGet func:httpGet[0m
+2022/05/07 16:15:50 worker.go:269: [0;32minfo taskSucceeded Processed task ebf14fa7-9ee7-4c37-85b8-f196831251ce. Results = <[0m
+2022/05/07 16:15:50 async_test.go:44: [0;32minfo func3 task post, name:httpGet func:httpGet[0m
+2022/05/07 16:16:03 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"12475124-8901-4dbb-976f-9deac7a9ca9e","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:16:03 async_test.go:41: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:16:03 worker.go:269: [0;32minfo taskSucceeded Processed task 12475124-8901-4dbb-976f-9deac7a9ca9e. Results = 2[0m
+2022/05/07 16:16:03 async_test.go:44: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:16:04 kafka.go:340: [0;32minfo consumeOne Received new message: {"UUID":"c7a7bf82-397d-405c-bbd8-89e3d0eb2e42","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:16:04 async_test.go:41: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:16:04 worker.go:269: [0;32minfo taskSucceeded Processed task c7a7bf82-397d-405c-bbd8-89e3d0eb2e42. Results = 2[0m
+2022/05/07 16:16:04 async_test.go:44: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:19:52 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:19:52 worker.go:59: [0;32minfo LaunchAsync - Broker: redis://192.168.64.5:6379[0m
+2022/05/07 16:19:52 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:19:52 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://192.168.64.5:6379[0m
+2022/05/07 16:19:52 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:19:52 retry.go:20: [0;32minfo 1 Retrying in 1 seconds[0m
+2022/05/07 16:19:53 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:19:53 retry.go:20: [0;32minfo 1 Retrying in 1 seconds[0m
+2022/05/07 16:19:54 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:19:54 retry.go:20: [0;32minfo 1 Retrying in 2 seconds[0m
+2022/05/07 16:19:56 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:19:56 retry.go:20: [0;32minfo 1 Retrying in 3 seconds[0m
+2022/05/07 16:19:59 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:19:59 retry.go:20: [0;32minfo 1 Retrying in 5 seconds[0m
+2022/05/07 16:23:24 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:23:24 worker.go:59: [0;32minfo LaunchAsync - Broker: redis://192.168.64.5:6379[0m
+2022/05/07 16:23:24 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:23:24 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://192.168.64.5:6379[0m
+2022/05/07 16:23:24 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:23:24 retry.go:20: [0;32minfo 1 Retrying in 1 seconds[0m
+2022/05/07 16:23:25 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:23:25 retry.go:20: [0;32minfo 1 Retrying in 1 seconds[0m
+2022/05/07 16:23:26 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:23:26 retry.go:20: [0;32minfo 1 Retrying in 2 seconds[0m
+2022/05/07 16:23:28 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:23:28 retry.go:20: [0;32minfo 1 Retrying in 3 seconds[0m
+2022/05/07 16:23:31 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:23:31 retry.go:20: [0;32minfo 1 Retrying in 5 seconds[0m
+2022/05/07 16:23:41 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:23:41 retry.go:20: [0;32minfo 1 Retrying in 8 seconds[0m
+2022/05/07 16:25:16 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:25:16 worker.go:59: [0;32minfo LaunchAsync - Broker: redis://192.168.64.5:6379[0m
+2022/05/07 16:25:16 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:25:16 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://192.168.64.5:6379[0m
+2022/05/07 16:25:16 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:25:16 retry.go:20: [0;32minfo 1 Retrying in 1 seconds[0m
+2022/05/07 16:25:17 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:25:17 retry.go:20: [0;32minfo 1 Retrying in 1 seconds[0m
+2022/05/07 16:25:18 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:25:18 retry.go:20: [0;32minfo 1 Retrying in 2 seconds[0m
+2022/05/07 16:25:20 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:25:20 retry.go:20: [0;32minfo 1 Retrying in 3 seconds[0m
+2022/05/07 16:25:23 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:25:23 retry.go:20: [0;32minfo 1 Retrying in 5 seconds[0m
+2022/05/07 16:26:47 async_test.go:47: [0;31merror func1 task handler error, err:WRONGPASS invalid username-password pair or user is disabled.[0m
+2022/05/07 16:26:47 retry.go:20: [0;32minfo 1 Retrying in 8 seconds[0m
+2022/05/07 16:27:32 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:27:32 worker.go:59: [0;32minfo LaunchAsync - Broker: redis://192.168.64.5:6379[0m
+2022/05/07 16:27:32 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:27:32 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://192.168.64.5:6379[0m
+2022/05/07 16:27:32 redis.go:105: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:27:42 redis.go:347: [0;32minfo consumeOne Received new message: {"UUID":"d645e985-8228-42ce-bd25-199c29c8c759","Name":"add","RoutingKey":"machinery_tasks","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:27:42 async_test.go:50: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:27:42 worker.go:269: [0;32minfo taskSucceeded Processed task d645e985-8228-42ce-bd25-199c29c8c759. Results = 2[0m
+2022/05/07 16:27:42 async_test.go:53: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:28:16 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:28:16 worker.go:59: [0;32minfo LaunchAsync - Broker: redis://192.168.64.5:6379[0m
+2022/05/07 16:28:16 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:28:16 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://192.168.64.5:6379[0m
+2022/05/07 16:28:16 redis.go:105: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:28:26 redis.go:347: [0;32minfo consumeOne Received new message: {"UUID":"4b0e8c5a-ebf4-4988-8255-4a7b00fa700e","Name":"add","RoutingKey":"machinery_tasks","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:28:26 async_test.go:50: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:28:26 worker.go:269: [0;32minfo taskSucceeded Processed task 4b0e8c5a-ebf4-4988-8255-4a7b00fa700e. Results = 2[0m
+2022/05/07 16:28:26 async_test.go:53: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:30:57 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:30:57 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:30:57 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:30:57 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:30:57 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:30:57 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:30:57 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:30:57 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:30:57 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:30:57 kafka.go:229: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:54:28 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:54:28 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:54:28 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:54:28 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:54:28 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:54:28 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:54:28 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:54:28 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:54:28 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:54:28 kafka.go:238: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:54:31 kafka.go:351: [0;32minfo consumeOne Received new message: {"UUID":"d2e40598-7bb8-47f5-9eab-a40885c65597","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:54:31 async_test.go:51: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:54:31 worker.go:269: [0;32minfo taskSucceeded Processed task d2e40598-7bb8-47f5-9eab-a40885c65597. Results = 2[0m
+2022/05/07 16:54:31 async_test.go:54: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:54:38 kafka.go:351: [0;32minfo consumeOne Received new message: {"UUID":"660b94af-0e4d-40cc-acd5-6d89b32e5f45","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:54:38 async_test.go:51: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:54:38 worker.go:269: [0;32minfo taskSucceeded Processed task 660b94af-0e4d-40cc-acd5-6d89b32e5f45. Results = 2[0m
+2022/05/07 16:54:38 async_test.go:54: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:56:19 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:56:19 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:56:19 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:56:19 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:56:19 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:56:19 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:56:19 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:56:19 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:56:19 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:56:19 kafka.go:238: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 16:56:30 kafka.go:351: [0;32minfo consumeOne Received new message: {"UUID":"64c07879-ec5b-477a-b16c-ff833d70d980","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 16:56:30 async_test.go:51: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 16:56:30 worker.go:269: [0;32minfo taskSucceeded Processed task 64c07879-ec5b-477a-b16c-ff833d70d980. Results = 2[0m
+2022/05/07 16:56:30 async_test.go:54: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 16:59:54 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 16:59:54 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 16:59:54 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 16:59:54 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 16:59:54 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 16:59:54 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 16:59:54 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 16:59:54 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 16:59:54 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 16:59:54 kafka.go:238: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 17:00:04 kafka.go:351: [0;32minfo consumeOne Received new message: {"UUID":"eb611879-0d76-4539-ab2e-70340c367c15","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 17:00:05 async_test.go:51: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 17:00:05 worker.go:269: [0;32minfo taskSucceeded Processed task eb611879-0d76-4539-ab2e-70340c367c15. Results = 2[0m
+2022/05/07 17:00:05 async_test.go:54: [0;32minfo func3 task post, name:add func:add[0m
+2022/05/07 17:03:55 worker.go:58: [0;32minfo LaunchAsync Launching a worker with the following settings:[0m
+2022/05/07 17:03:55 worker.go:59: [0;32minfo LaunchAsync - Broker: kafka://test-nameserver.jmq.jd.local:50088[0m
+2022/05/07 17:03:55 worker.go:61: [0;32minfo LaunchAsync - DefaultQueue: machinery_tasks[0m
+2022/05/07 17:03:55 worker.go:65: [0;32minfo LaunchAsync - ResultBackend: redis://11.50.81.108:5360[0m
+2022/05/07 17:03:55 worker.go:75: [0;32minfo LaunchAsync - Kafka:[0m
+2022/05/07 17:03:55 worker.go:76: [0;32minfo LaunchAsync   - Topic: niffler_task[0m
+2022/05/07 17:03:55 worker.go:77: [0;32minfo LaunchAsync   - Token: ca1f5307d4b340a7bbdcd36b55270c32[0m
+2022/05/07 17:03:55 worker.go:78: [0;32minfo LaunchAsync   - ClientID: helloshx[0m
+2022/05/07 17:03:55 worker.go:79: [0;32minfo LaunchAsync   - GroupID: 1[0m
+2022/05/07 17:03:55 kafka.go:238: [0;32minfo func1  [*] Waiting for messages. To exit press CTRL+C [0m
+2022/05/07 17:04:17 kafka.go:351: [0;32minfo consumeOne Received new message: {"UUID":"1b9f3c38-95ec-4f21-a3ed-af0f162163c7","Name":"add","RoutingKey":"","ETA":null,"GroupUUID":"","GroupTaskCount":0,"Args":[{"Name":"","Type":"int64","Value":1},{"Name":"","Type":"int64","Value":1}],"Headers":{},"Priority":0,"Immutable":false,"RetryCount":0,"RetryTimeout":0,"OnSuccess":null,"OnError":null,"ChordCallback":null,"BrokerMessageGroupId":"","SQSReceiptHandle":"","StopTaskDeletionOnError":false,"IgnoreWhenTaskNotRegistered":false}[0m
+2022/05/07 17:04:20 async_test.go:51: [0;32minfo func2 task pre post, name:add func:add[0m
+2022/05/07 17:04:20 worker.go:269: [0;32minfo taskSucceeded Processed task 1b9f3c38-95ec-4f21-a3ed-af0f162163c7. Results = 2[0m
+2022/05/07 17:04:21 async_test.go:54: [0;32minfo func3 task post, name:add func:add[0m
