@@ -6,8 +6,11 @@ import (
 	"net/url"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
+
+	"github.com/opentracing/opentracing-go"
 
 	"github.com/RichardKnop/machinery/v1/backends/amqp"
 	"github.com/RichardKnop/machinery/v1/brokers/errs"
@@ -15,7 +18,6 @@ import (
 	"github.com/RichardKnop/machinery/v1/retry"
 	"github.com/RichardKnop/machinery/v1/tasks"
 	"github.com/RichardKnop/machinery/v1/tracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // Worker represents a single worker process
@@ -69,6 +71,15 @@ func (worker *Worker) LaunchAsync(errorsChan chan<- error) {
 		log.INFO.Printf("  - PrefetchCount: %d", cnf.AMQP.PrefetchCount)
 	}
 
+	if cnf.Kafka != nil {
+		log.INFO.Printf("- Kafka:")
+		log.INFO.Printf("  - Topic: %v", cnf.Kafka.Topic)
+		log.INFO.Printf("  - Token: %v", cnf.Kafka.Token)
+		log.INFO.Printf("  - ClientID: %v", cnf.Kafka.ClientID)
+		log.INFO.Printf("  - GroupID: %v", cnf.Kafka.ConsumerGroupId)
+	}
+
+	var signalWG sync.WaitGroup
 	// Goroutine to start broker consumption and handle retries when broker connection dies
 	go func() {
 		for {
@@ -81,6 +92,7 @@ func (worker *Worker) LaunchAsync(errorsChan chan<- error) {
 					log.WARNING.Printf("Broker failed with error: %s", err)
 				}
 			} else {
+				signalWG.Wait()
 				errorsChan <- err // stop the goroutine
 				return
 			}
@@ -93,23 +105,22 @@ func (worker *Worker) LaunchAsync(errorsChan chan<- error) {
 
 		// Goroutine Handle SIGINT and SIGTERM signals
 		go func() {
-			for {
-				select {
-				case s := <-sig:
-					log.WARNING.Printf("Signal received: %v", s)
-					signalsReceived++
+			for s := range sig {
+				log.WARNING.Printf("Signal received: %v", s)
+				signalsReceived++
 
-					if signalsReceived < 2 {
-						// After first Ctrl+C start quitting the worker gracefully
-						log.WARNING.Print("Waiting for running tasks to finish before shutting down")
-						go func() {
-							worker.Quit()
-							errorsChan <- ErrWorkerQuitGracefully
-						}()
-					} else {
-						// Abort the program when user hits Ctrl+C second time in a row
-						errorsChan <- ErrWorkerQuitAbruptly
-					}
+				if signalsReceived < 2 {
+					// After first Ctrl+C start quitting the worker gracefully
+					log.WARNING.Print("Waiting for running tasks to finish before shutting down")
+					signalWG.Add(1)
+					go func() {
+						worker.Quit()
+						errorsChan <- ErrWorkerQuitGracefully
+						signalWG.Done()
+					}()
+				} else {
+					// Abort the program when user hits Ctrl+C second time in a row
+					errorsChan <- ErrWorkerQuitAbruptly
 				}
 			}
 		}()
@@ -278,6 +289,11 @@ func (worker *Worker) taskSucceeded(signature *tasks.Signature, taskResults []*t
 		return nil
 	}
 
+	// There is no chord callback, just return
+	if signature.ChordCallback == nil {
+		return nil
+	}
+
 	// Check if all task in the group has completed
 	groupCompleted, err := worker.server.GetBackend().GroupCompleted(
 		signature.GroupUUID,
@@ -297,11 +313,6 @@ func (worker *Worker) taskSucceeded(signature *tasks.Signature, taskResults []*t
 		defer worker.server.GetBackend().PurgeGroupMeta(signature.GroupUUID)
 	}
 
-	// There is no chord callback, just return
-	if signature.ChordCallback == nil {
-		return nil
-	}
-
 	// Trigger chord callback
 	shouldTrigger, err := worker.server.GetBackend().TriggerChord(signature.GroupUUID)
 	if err != nil {
@@ -319,6 +330,12 @@ func (worker *Worker) taskSucceeded(signature *tasks.Signature, taskResults []*t
 		signature.GroupTaskCount,
 	)
 	if err != nil {
+		log.ERROR.Printf(
+			"Failed to get tasks states for group:[%s]. Task count:[%d]. The chord may not be triggered. Error:[%s]",
+			signature.GroupUUID,
+			signature.GroupTaskCount,
+			err,
+		)
 		return nil
 	}
 

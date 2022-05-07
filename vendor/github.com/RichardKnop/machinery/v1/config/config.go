@@ -30,6 +30,11 @@ var (
 			BindingKey:    "machinery_task",
 			PrefetchCount: 3,
 		},
+		Kafka: &KafkaConfig{
+			Topic:                     "machinery_topic",
+			DelayedTasksTopic:         "machinery_delayed_topic",
+			DelayedTasksConsumePeriod: 500,
+		},
 		DynamoDB: &DynamoDBConfig{
 			TaskStatesTable: "task_states",
 			GroupMetasTable: "group_metas",
@@ -54,15 +59,17 @@ var (
 // Config holds all configuration for our program
 type Config struct {
 	Broker                  string           `yaml:"broker" envconfig:"BROKER"`
+	Lock                    string           `yaml:"lock" envconfig:"LOCK"`
 	MultipleBrokerSeparator string           `yaml:"multiple_broker_separator" envconfig:"MULTIPLE_BROKEN_SEPARATOR"`
 	DefaultQueue            string           `yaml:"default_queue" envconfig:"DEFAULT_QUEUE"`
 	ResultBackend           string           `yaml:"result_backend" envconfig:"RESULT_BACKEND"`
 	ResultsExpireIn         int              `yaml:"results_expire_in" envconfig:"RESULTS_EXPIRE_IN"`
 	AMQP                    *AMQPConfig      `yaml:"amqp"`
+	Kafka                   *KafkaConfig     `yaml:"kafka"`
 	SQS                     *SQSConfig       `yaml:"sqs"`
 	Redis                   *RedisConfig     `yaml:"redis"`
 	GCPPubSub               *GCPPubSubConfig `yaml:"-" ignored:"true"`
-	MongoDB                 *MongoDBConfig   `yamk:"-" ignored:"true"`
+	MongoDB                 *MongoDBConfig   `yaml:"-" ignored:"true"`
 	TLSConfig               *tls.Config
 	// NoUnixSignals - when set disables signal handling in machinery
 	NoUnixSignals bool            `yaml:"no_unix_signals" envconfig:"NO_UNIX_SIGNALS"`
@@ -84,6 +91,31 @@ type AMQPConfig struct {
 	BindingKey       string           `yaml:"binding_key" envconfig:"AMQP_BINDING_KEY"`
 	PrefetchCount    int              `yaml:"prefetch_count" envconfig:"AMQP_PREFETCH_COUNT"`
 	AutoDelete       bool             `yaml:"auto_delete" envconfig:"AMQP_AUTO_DELETE"`
+}
+
+// KafkaConfig wraps Kafka related configuration
+type KafkaConfig struct {
+	// Kafka topic for normal tasks
+	Topic string `yaml:"topic" envconfig:"KAFKA_TOPIC"`
+
+	Token string `yaml:"token" envconfig:"TOKEN"`
+
+	ConsumerGroupId string `yaml:"consumer_group_id" envconfig:"KAFKA_CONSUMER_GROUP_ID"`
+
+	Partition int    `yaml:"partition" envconfig:"PARTITION"`
+	ClientID  string `yaml:"client_id" envconfig:"CLIENT_ID"`
+
+	// Kafka topic for delayed tasks
+	DelayedTasksTopic string `yaml:"delayed_tasks_topic" envconfig:"KAFKA_DELAYED_TASKS_TOPIC"`
+
+	// DelayedTasksConsumePeriod specifies the period in milliseconds when consume delayed tasks
+	// Default: 500
+	DelayedTasksConsumePeriod int `yaml:"delayed_tasks_consume_period" envconfig:"KAFKA_DELAYED_TASKS_CONSUME_PERIOD"`
+
+	// the interval at which offsets are committed to the broker. If 0, commits will be handled synchronously.
+	// default: 0
+	CommitInterval     int  `yaml:"commit_interval" envconfig:"KAFKA_COMMIT_INTERVAL"`
+	EnableDelayedTasks bool `json:"enable_delayed_tasks"`
 }
 
 // DynamoDBConfig wraps DynamoDB related configuration
@@ -148,6 +180,9 @@ type RedisConfig struct {
 
 	// MasterName specifies a redis master name in order to configure a sentinel-backed redis FailoverClient
 	MasterName string `yaml:"master_name" envconfig:"REDIS_MASTER_NAME"`
+	// ClusterMode specifies machinery should use redis cluster client explicitly
+	ClusterMode bool   `yaml:"cluster_mode" envconfig:"REDIS_CLUSTER_MODE"`
+	Password    string `yaml:"password" envconfig:"PASSWORD"`
 }
 
 // GCPPubSubConfig wraps GCP PubSub related configuration

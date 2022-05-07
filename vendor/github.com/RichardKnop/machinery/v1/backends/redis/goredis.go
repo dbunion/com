@@ -2,19 +2,21 @@ package redis
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
+	"github.com/go-redsync/redsync/v4"
+	redsyncgoredis "github.com/go-redsync/redsync/v4/redis/goredis/v8"
 
 	"github.com/RichardKnop/machinery/v1/backends/iface"
 	"github.com/RichardKnop/machinery/v1/common"
 	"github.com/RichardKnop/machinery/v1/config"
 	"github.com/RichardKnop/machinery/v1/log"
 	"github.com/RichardKnop/machinery/v1/tasks"
-	"github.com/RichardKnop/redsync"
 )
 
 // BackendGR represents a Redis result backend
@@ -36,10 +38,10 @@ func NewGR(cnf *config.Config, addrs []string, db int) iface.Backend {
 		Backend: common.NewBackend(cnf),
 	}
 	parts := strings.Split(addrs[0], "@")
-	if len(parts) == 2 {
+	if len(parts) >= 2 {
 		// with passwrod
-		b.password = parts[0]
-		addrs[0] = parts[1]
+		b.password = strings.Join(parts[:len(parts)-1], "@")
+		addrs[0] = parts[len(parts)-1] // addr is the last one without @
 	}
 
 	ropt := &redis.UniversalOptions{
@@ -51,7 +53,13 @@ func NewGR(cnf *config.Config, addrs []string, db int) iface.Backend {
 		ropt.MasterName = cnf.Redis.MasterName
 	}
 
-	b.rclient = redis.NewUniversalClient(ropt)
+	if cnf.Redis != nil && cnf.Redis.ClusterMode {
+		b.rclient = redis.NewClusterClient(ropt.Cluster())
+	} else {
+
+		b.rclient = redis.NewUniversalClient(ropt)
+	}
+	b.redsync = redsync.New(redsyncgoredis.NewPool(b.rclient))
 	return b
 }
 
@@ -68,12 +76,13 @@ func (b *BackendGR) InitGroup(groupUUID string, taskUUIDs []string) error {
 		return err
 	}
 
-	err = b.rclient.Set(groupUUID, encoded, 0).Err()
+	expiration := b.getExpiration()
+	err = b.rclient.Set(context.Background(), groupUUID, encoded, expiration).Err()
 	if err != nil {
 		return err
 	}
 
-	return b.setExpirationTime(groupUUID)
+	return nil
 }
 
 // GroupCompleted returns true if all tasks in a group finished
@@ -138,12 +147,13 @@ func (b *BackendGR) TriggerChord(groupUUID string) (bool, error) {
 		return false, err
 	}
 
-	err = b.rclient.Set(groupUUID, encoded, 0).Err()
+	expiration := b.getExpiration()
+	err = b.rclient.Set(context.Background(), groupUUID, encoded, expiration).Err()
 	if err != nil {
 		return false, err
 	}
 
-	return true, b.setExpirationTime(groupUUID)
+	return true, nil
 }
 
 func (b *BackendGR) mergeNewTaskState(newState *tasks.TaskState) {
@@ -198,7 +208,7 @@ func (b *BackendGR) SetStateFailure(signature *tasks.Signature, err string) erro
 // GetState returns the latest task state
 func (b *BackendGR) GetState(taskUUID string) (*tasks.TaskState, error) {
 
-	item, err := b.rclient.Get(taskUUID).Bytes()
+	item, err := b.rclient.Get(context.Background(), taskUUID).Bytes()
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +224,7 @@ func (b *BackendGR) GetState(taskUUID string) (*tasks.TaskState, error) {
 
 // PurgeState deletes stored task state
 func (b *BackendGR) PurgeState(taskUUID string) error {
-	err := b.rclient.Del(taskUUID).Err()
+	err := b.rclient.Del(context.Background(), taskUUID).Err()
 	if err != nil {
 		return err
 	}
@@ -224,7 +234,7 @@ func (b *BackendGR) PurgeState(taskUUID string) error {
 
 // PurgeGroupMeta deletes stored group meta data
 func (b *BackendGR) PurgeGroupMeta(groupUUID string) error {
-	err := b.rclient.Del(groupUUID).Err()
+	err := b.rclient.Del(context.Background(), groupUUID).Err()
 	if err != nil {
 		return err
 	}
@@ -234,7 +244,7 @@ func (b *BackendGR) PurgeGroupMeta(groupUUID string) error {
 
 // getGroupMeta retrieves group meta data, convenience function to avoid repetition
 func (b *BackendGR) getGroupMeta(groupUUID string) (*tasks.GroupMeta, error) {
-	item, err := b.rclient.Get(groupUUID).Bytes()
+	item, err := b.rclient.Get(context.Background(), groupUUID).Bytes()
 	if err != nil {
 		return nil, err
 	}
@@ -253,9 +263,9 @@ func (b *BackendGR) getGroupMeta(groupUUID string) (*tasks.GroupMeta, error) {
 func (b *BackendGR) getStates(taskUUIDs ...string) ([]*tasks.TaskState, error) {
 	taskStates := make([]*tasks.TaskState, len(taskUUIDs))
 	// to avoid CROSSSLOT error, use pipeline
-	cmders, err := b.rclient.Pipelined(func(pipeliner redis.Pipeliner) error {
+	cmders, err := b.rclient.Pipelined(context.Background(), func(pipeliner redis.Pipeliner) error {
 		for _, uuid := range taskUUIDs {
-			pipeliner.Get(uuid)
+			pipeliner.Get(context.Background(), uuid)
 		}
 		return nil
 	})
@@ -287,27 +297,22 @@ func (b *BackendGR) updateState(taskState *tasks.TaskState) error {
 		return err
 	}
 
-	_, err = b.rclient.Set(taskState.TaskUUID, encoded, 0).Result()
-	if err != nil {
-		return err
-	}
-
-	return b.setExpirationTime(taskState.TaskUUID)
-}
-
-// setExpirationTime sets expiration timestamp on a stored task state
-func (b *BackendGR) setExpirationTime(key string) error {
-	expiresIn := b.GetConfig().ResultsExpireIn
-	if expiresIn == 0 {
-		// // expire results after 1 hour by default
-		expiresIn = config.DefaultResultsExpireIn
-	}
-	expirationTimestamp := time.Now().Add(time.Duration(expiresIn) * time.Second)
-
-	_, err := b.rclient.ExpireAt(key, expirationTimestamp).Result()
+	expiration := b.getExpiration()
+	_, err = b.rclient.Set(context.Background(), taskState.TaskUUID, encoded, expiration).Result()
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// getExpiration returns expiration for a stored task state
+func (b *BackendGR) getExpiration() time.Duration {
+	expiresIn := b.GetConfig().ResultsExpireIn
+	if expiresIn == 0 {
+		// expire results after 1 hour by default
+		expiresIn = config.DefaultResultsExpireIn
+	}
+
+	return time.Duration(expiresIn) * time.Second
 }
