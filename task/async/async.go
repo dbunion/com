@@ -83,6 +83,9 @@ func (t *Task) callback(item *item, r task.Result) {
 
 // Run - run all task
 func (t *Task) Run(chain bool) error {
+	defer func() {
+		t.items = make([]*item, 0)
+	}()
 
 	makeArgsFunc := func(list []task.Arg) []tasks.Arg {
 		args := make([]tasks.Arg, 0)
