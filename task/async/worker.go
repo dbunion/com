@@ -113,9 +113,13 @@ func (w *Worker) StartAndGC(cfg task.Config) error {
 	}
 
 	consumerTag := "machinery_worker"
+	concurrency := cfg.Concurrency
+	if concurrency == 0 {
+		concurrency = 10
+	}
 
 	w.server = server
-	w.worker = server.NewWorker(consumerTag, 10)
+	w.worker = server.NewWorker(consumerTag, concurrency)
 	if cfg.Logger != nil {
 		w.logger = cfg.Logger
 		log.Set(cfg.Logger)

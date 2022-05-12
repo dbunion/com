@@ -9,13 +9,13 @@ const (
 
 // Worker interface contains all behaviors for task worker
 type Worker interface {
-	// run worker
+	// Run - run worker
 	Run() error
 
-	// close worker
+	// Close - close worker
 	Close() error
 
-	// start gc routine based on config string settings.
+	// StartAndGC - start gc routine based on config string settings.
 	StartAndGC(config Config) error
 }
 
