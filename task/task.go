@@ -26,6 +26,9 @@ type Config struct {
 	ResultBackend   string `json:"result_backend"`
 	ResultsExpireIn int    `json:"results_expire_in"`
 
+	// worker
+	Concurrency int `json:"concurrency"`
+
 	FuncWraps map[string]FuncWrap `json:"func_wraps"`
 	Logger    log.Logger          `json:"logger"`
 
