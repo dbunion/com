@@ -38,4 +38,4 @@ require (
 	vitess.io/vitess v0.0.0-20200524212726-2bbe82266007
 )
 
-replace github.com/RichardKnop/machinery => github.com/dbunion/machinery v0.0.0-20220507085015-a8e10d69adee
+replace github.com/RichardKnop/machinery => github.com/dbunion/machinery v0.0.0-20220513053750-518e322bb76a
